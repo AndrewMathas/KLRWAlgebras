@@ -123,7 +123,8 @@ Usage
    klr_cyclotomic_dimension(['B',3],[2], [2,3,3,2,1], verbose=True)
 ```
 
-
+Author
+------
 Andrew Mathas
 Copyright (C) 2022
 
