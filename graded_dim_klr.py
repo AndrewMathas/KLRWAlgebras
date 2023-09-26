@@ -391,7 +391,14 @@ class Block:
         return ' '.join(f'{i}^{self._block[i]}' for i in self._block)
 
 
-def CheckForRepeatedPositiveRoots(cry, L, depth=Infinity, minimal=False, verbose=False):
+def CheckForRepeatedPositiveRoots(
+        cry,
+        L,
+        depth=Infinity,
+        minimal=False,
+        minlength=False,
+       verbose=False
+    ):
     '''
     Check for vertices of the crystal graph that correspond to the same simple
     root, which implies that they live in a non-semisimple block of the
@@ -404,6 +411,9 @@ def CheckForRepeatedPositiveRoots(cry, L, depth=Infinity, minimal=False, verbose
         def vprint(*args): print(args)
     else:
         def vprint(*args): pass
+
+    if minlength:
+        minimal = True
 
     cry = CartanType(cry)
     R = RootSystem(cry)
@@ -434,16 +444,20 @@ def CheckForRepeatedPositiveRoots(cry, L, depth=Infinity, minimal=False, verbose
                     blocks[bstr] = []
                 blocks[bstr].append(new_simple)
                 if minimal and len(blocks[bstr])>1:
+                    if minlength:
+                        return blocks[bstr][0].size()
                     return blocks[bstr]
 
         if vertices == []:
             vertices = next_vertices
             next_vertices = []
 
-    if minimal:
+    if minimal or minlength:
         blocks = {b: blocks[b] for b in blocks if len(blocks[b])>1}
         indices = list(blocks.keys())
         sorted(indices, key=lambda b: blocks[b][0].size())
+        if minlength:
+            return oo if blocks=={} else blocks[0].size()
         return blocks[ indices[0] ] if blocks!={} else []
 
     return {b: blocks[b] for b in blocks if len(blocks[b])>1}
