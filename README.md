@@ -1,7 +1,15 @@
-GradedDimKLR
-============
+KLRW algebras
+============+
 
-[SageMath](https://www.sagemath.org/SageMath) code for computing the dimensions of the weight spaces of the cyclotomic KLR algebras attached to symmetrisable quivers using the amazing formula
+[SageMath](https://www.sagemath.org/SageMath) and LaTeX code for KLRW algebras. In particular, this package contains code for:
+
+ - drawing KLRW diagrams
+ - checking various crystal theoretic properties that translate into results about the KLRW algebras
+
+Graded dimensons of weight spaces of KLR algebras
+-------------------------------------------------
+
+The dimensions of the weight spaces of the cyclotomic KLR algebras attached to symmetrisable quivers using the amazing formula
 
 ```math
     \dim_q e(i)R^\Lambda_n e(j)
@@ -126,7 +134,7 @@ Usage
 Author
 ------
 Andrew Mathas
-Copyright (C) 2022
+Copyright (C) 2022-23
 
 ------------
 
