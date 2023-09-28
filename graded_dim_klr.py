@@ -568,7 +568,17 @@ class CrystalArm:
         '''
         return self.word == other.word
 
-def FindMinimalCrystalLoops(cry, L, depth=Infinity, verbose=False, length=None, add_path=False, only_adjacent=0, collect=True):
+def FindMinimalCrystalLoops(
+        cry,
+        L,
+        depth=Infinity,
+        verbose=False,
+        length=None,
+        add_path=False,
+        only_adjacent=0,
+        collect=True,
+        check_plactic=False
+    ):
     '''
     Return the list of all minimal length loops in the crystal graph that have
     edges of colours i and j.
@@ -714,13 +724,14 @@ def FindMinimalCrystalSquares(cry, L, depth=Infinity, verbose=False, add_path=Fa
     Lambda = sum(RootSystem(cry).weight_space().basis()[k] for k in L)
     vprint(f'Constructing the {cry}-crystal of weight {Lambda}')
     crystal = crystals.LSPaths(Lambda)
+    G = crystal.digraph(depth=depth)
     W = CoxeterGroup(cry)
     descents = lambda w: W.prod(W.simple_reflection(int(i)) for i in w).descents()
     vlam = crystal.highest_weight_vector()
-    crystal_loops = []  # loops we find in the crystal graph
+    crystal_loops = []          # loops we find in the crystal graph
     vertices = [ (vlam, None) ] # vertices at depth current_depth
-    next_vertices = []  # vertices with length one more than the current vertex
-    current_depth = 0   # keep track of the current depth in the crystal graph
+    next_vertices = []          # vertices with length one more than the current vertex
+    current_depth = 0           # keep track of the current depth in the crystal graph
     vertex_path = {vlam: ''}
     while vertices != []:
         v, ancestor = vertices.pop()

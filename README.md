@@ -1,15 +1,18 @@
 KLRW algebras
-============+
+=============
 
 [SageMath](https://www.sagemath.org/SageMath) and LaTeX code for KLRW algebras. In particular, this package contains code for:
 
  - drawing KLRW diagrams
  - checking various crystal theoretic properties that translate into results about the KLRW algebras
 
+This code is used in the paper [Cellularity of KLR and weighted KLRW algebras via crystals](https://arxiv.org/abs/2309.13867).
+
+
 Graded dimensons of weight spaces of KLR algebras
 -------------------------------------------------
 
-The dimensions of the weight spaces of the cyclotomic KLR algebras attached to symmetrisable quivers using the amazing formula
+The dimensions of the weight spaces of the cyclotomic KLR algebras attached to symmetrisable quivers are given by the amazing formula
 
 ```math
     \dim_q e(i)R^\Lambda_n e(j)
@@ -19,7 +22,7 @@ The dimensions of the weight spaces of the cyclotomic KLR algebras attached to s
 
 from the paper [Graded dimensions and monomial bases for the cyclotomic quiver Hecke algebras](https://arxiv.org/abs/2108.05508G) of Hu and Shi. Here, $e(i)R^\Lambda_ne(j)$ is the weight space of the KLR algebra $R^\Lambda_n$ determined by the sequences $i,j\in I^n$ and $\Lambda$ is a dominant weight for the corresponding quiver, which has vertex set $I$. See the Hu-Shi paper for the unexplained notation in the formula.
 
-The attached code provides a single command ``klr_cyclotomic_dimension`` that uses the Hu-Shi formula to compute the dimension. The syntax of this command is:
+The attached code provides the command ``klr_cyclotomic_dimension`` that uses the Hu-Shi formula to compute these graded dimensions. The syntax of this command is:
 
 ```python
    klr_cyclotomic_dimension(C, L, i, [j, verbose])
