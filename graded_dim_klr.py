@@ -647,7 +647,7 @@ def FindMinimalCrystalLoops(
                                 hash = ''
                                 if only_adjacent:
                                     # check to see if one of the colours is a
-                                    # decent of some suffix of the path
+                                    # descent of some suffix of the path
                                     i, j = xarms[a]._colours
                                     k = 0
                                     while hash == '' and k < len(vertex_path[v]):
