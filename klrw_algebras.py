@@ -2,7 +2,17 @@ r"""
     Compute the graded dimension of  e(i)R^Lambda_\alpha e(j),
     where \Lambda is a dominant weight and i,j\in I^\alpha.
 
-    By Hu-Shi, if i,j\in I^n then
+The weighted KLRW algebras are a family of diagram algebras indexed by a
+(symmetrisable) quiver. The diagrams that generate these algebras are diagrams
+with red, solid and ghost strings, that can carry (finitely many) dots. The
+weight KLRW algebras are closely related to the KLR algebras introduced,
+indecently, by Khovanov-Lauda and Rouquier.
+
+
+Compute the graded dimension of  $e(i)R^Lambda_\alpha e(j)$,
+where \Lambda is a dominant weight and $i,j\in I^\alpha$.
+
+By Hu-Shi [HuShi21]_, if $i,j\in I^n$ then
 
     .. math:
 
@@ -11,9 +21,1046 @@ r"""
               \prod_{t=1}^n[N^\Lambda(w,i,t)]_{i_t} q_{i_i}^{N^\Lambda(i,t)-1}}
 
     sage: R = RootSystem(['G', 2])
-    sage:  klr_cyclotomic_dimension(R, [1], [1,2,1,1,2])
+    sage: klr_cyclotomic_dimension(R, [1], [1,2,1,1,2])
 
     sage: KLRW_Idempotents(['F',4],[2],6,latex=True)
+    \documentclass{article}
+    <BLANKLINE>
+    \usepackage{tikz}
+    \tikzset{
+    anchorbase/.style={baseline={([yshift=#1]current bounding box.center)}},
+    anchorbase/.default={-0.5ex},
+    dot colour/.initial=black,
+    dot colour/.default=black,
+    redstring/.style = {
+    draw=#1!50,fill=none,line width=0.35mm,preaction={draw=#1,line width=2.5pt,-},
+    nodes={color=#1}
+    },
+    redstring/.default={red},
+    affine/.style= {redstring={orange}},
+    solid/.style = {draw=blue,fill=none,dot colour=blue,line width=0.4mm,nodes={color=blue}},
+    ghost/.style = {draw=gray,dashed, fill=none,dot colour=darkgray},
+    }
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{document}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.40,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.40,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-1.48,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.48,0)--+(0,1)node[above]{ $1$ };
+    \node at (0,-0.8) {233211, $[-2 \Lambda_{1} + \Lambda_{2} + 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.48,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.48,0)--+(0,1)node[above]{ $1$ };
+    \node at (0,-0.8) {233241, $[-\Lambda_{1} + \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \Lambda_{4}, \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.40,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.40,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {233214, $[-\Lambda_{1} + \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \Lambda_{4}, \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.48,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.48,0)--+(0,1)node[above]{ $1$ };
+    \node at (0,-0.8) {233421, $[-\Lambda_{1} + \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \Lambda_{4}, \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.48,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.48,0)--+(0,1)node[above]{ $1$ };
+    \node at (0,-0.8) {234321, $[-\Lambda_{1} + \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \Lambda_{4}, \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.40,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.40,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {233414, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.48,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.48,0)--+(0,1)node[above]{ $1$ };
+    \node at (0,-0.8) {233441, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.32,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.32,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {233144, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.40,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.40,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {234314, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.48,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.48,0)--+(0,1)node[above]{ $1$ };
+    \node at (0,-0.8) {234341, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.32,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.32,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {234134, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {231344, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {231434, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {213344, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {213434, $[-\Lambda_{1} + 2 \Lambda_{2} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.40,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.40,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {233412, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.32,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.32,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {233142, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.32,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.32,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {233124, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.40,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.40,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {234312, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.32,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.32,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {234132, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {231342, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {231324, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {231432, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {213342, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {213324, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {213432, $[\frac{1}{2} \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {231233, $[\frac{1}{2} \Lambda_{1} - \Lambda_{3} + 2 \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {213233, $[\frac{1}{2} \Lambda_{1} - \Lambda_{3} + 2 \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{2} - \Lambda_{3} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-1.32,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.32,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {234123, $[\frac{1}{4} \Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3} + \frac{1}{2} \Lambda_{4}, \frac{1}{4} \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \frac{1}{2} \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{3}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {231243, $[\frac{1}{4} \Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3} + \frac{1}{2} \Lambda_{4}, \frac{1}{4} \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \frac{1}{2} \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{3}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {231423, $[\frac{1}{4} \Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3} + \frac{1}{2} \Lambda_{4}, \frac{1}{4} \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \frac{1}{2} \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{3}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {213243, $[\frac{1}{4} \Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3} + \frac{1}{2} \Lambda_{4}, \frac{1}{4} \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \frac{1}{2} \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{3}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {213423, $[\frac{1}{4} \Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3} + \frac{1}{2} \Lambda_{4}, \frac{1}{4} \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{3} - \frac{1}{2} \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{3}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {231234, $[\frac{1}{4} \Lambda_{1} + \frac{1}{2} \Lambda_{3} - \Lambda_{4}, \frac{1}{4} \Lambda_{1} - \frac{1}{2} \Lambda_{3} + \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{3}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.60,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.60,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {213234, $[\frac{1}{4} \Lambda_{1} + \frac{1}{2} \Lambda_{3} - \Lambda_{4}, \frac{1}{4} \Lambda_{1} - \frac{1}{2} \Lambda_{3} + \Lambda_{4}, -\frac{1}{2} \Lambda_{1} + \Lambda_{3}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {233244, $[2 \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {233424, $[2 \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {233442, $[2 \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.52,0)node[below]{ $4$ }--+(0,1);
+    \node at (0,-0.8) {234324, $[2 \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {234342, $[2 \Lambda_{1} - \Lambda_{2} + 2 \Lambda_{3} - 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.32,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.68,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](1.60,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {233243, $[\Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3}, \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.68,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {233423, $[\Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3}, \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](1.76,0)node[below]{ $4$ }--+(0,1);
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.52,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.52,0)--+(0,1)node[above]{ $3$ };
+    \node at (0,-0.8) {234323, $[\Lambda_{1} + \frac{1}{2} \Lambda_{2} - \Lambda_{3}, \Lambda_{1} - \frac{1}{2} \Lambda_{2} + \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.32,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.32,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {233122, $[\Lambda_{1} - 2 \Lambda_{2} + 2 \Lambda_{3} + 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](0.84,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.84,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-1.24,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.24,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {231322, $[\Lambda_{1} - 2 \Lambda_{2} + 2 \Lambda_{3} + 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \begin{tikzpicture}[scale=2]
+    \draw[redstring](0,0)node[below]{ $2$ }--+(0,1);
+    \draw[solid](-0.08,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.92,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-1.16,0)node[below]{ $1$ }--+(0,1);
+    \draw[ghost](-0.16,0)--+(0,1)node[above]{ $1$ };
+    \draw[solid](0.76,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.76,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](0.68,0)node[below]{ $3$ }--+(0,1);
+    \draw[ghost](1.68,0)--+(0,1)node[above]{ $3$ };
+    \draw[solid](-0.40,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.60,0)--+(0,1)node[above]{ $2$ };
+    \draw[solid](-0.48,0)node[below]{ $2$ }--+(0,1);
+    \draw[ghost](0.52,0)--+(0,1)node[above]{ $2$ };
+    \node at (0,-0.8) {213322, $[\Lambda_{1} - 2 \Lambda_{2} + 2 \Lambda_{3} + 2 \Lambda_{4}]$};
+    \end{tikzpicture}
+    <BLANKLINE>
+    <BLANKLINE>
+    \end{document}
+    <BLANKLINE>
+    [        1  1           2        2  3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  1        2  2  2     3  3         ,
+    1           2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  2     3  3     4      ,
+    1           2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  2     3  3     4      ,
+    1           2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  2     3  3     4      ,
+    1           2        2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  2     3  3        4   ,
+    1              2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4  4      ,
+    1              2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4  4      ,
+    1              2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4  4      ,
+    1              2     3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4     4   ,
+    1              2     3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4     4   ,
+    1              2     3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4     4   ,
+    1              2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4  4      ,
+    1              2     3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4     4   ,
+    1              2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4  4      ,
+    1              2     3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1     2  2  3  3     4     4   ,
+    1        2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3     4      ,
+    1        2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3     4      ,
+    1        2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3     4      ,
+    1        2        2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3        4   ,
+    1        2        2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3        4   ,
+    1        2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3     4      ,
+    1        2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3     4      ,
+    1        2        2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3        4   ,
+    1        2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3     4      ,
+    1        2        2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3     4      ,
+    1        2        2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2     3  3        4   ,
+    1              2     2  3  3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3  3     3            ,
+    1              2     2  3  3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3  3     3            ,
+    1           2     2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3     3        4   ,
+    1           2     2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3     3        4   ,
+    1           2     2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3     3        4   ,
+    1           2     2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3     3        4   ,
+    1           2     2  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3     3        4   ,
+    1           2     2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3     3     4      ,
+    1           2     2     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2     2  2  3     3     4      ,
+    2        2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2     3  3     4  4      ,
+    2        2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2     3  3     4  4      ,
+    2        2        3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2     3  3     4  4      ,
+    2        2     3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2     3  3     4     4   ,
+    2        2     3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2     3  3     4     4   ,
+    2        2  3     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2  3     3  3        4      ,
+    2        2  3     3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2  3     3  3        4      ,
+    2        2  3  3     3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    2  2  2  3     3  3           4   ,
+    1        2  2        2  3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2  2     2  2        3  3         ,
+    1        2  2        2  3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2  2     2  2        3  3         ,
+    1        2  2        2  3  3
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+    <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+    1  2  2     2  2        3  3         ]
+
+AUTHORS:
+
+- Andrew Mathas (2023): initial version
+
+# References
+
+.. [HuShu21] ]J. Hu and L. Shi
+    *Graded dimensions and monomial bases for the cyclotomic quiver Hecke algebras*
+    :arxiv:`2108.05508`
 
 
     Andrew Mathas
@@ -67,66 +1114,23 @@ def klr_cyclotomic_dimension(C, L, bi, bj=None, base=[], verbose=False, cancelli
     EXAMPLES::
 
         sage: klr_cyclotomic_dimension(['D',4],[2], [2,3,4,1])
-        Subgroup of permutations = < () >
-        N(1,t)-1: 0  0  0  0
-        N(w,t):   1  1  1  1
-        X(w): 1
-        1
+        ({1: [()]}, 1)
         sage: klr_cyclotomic_dimension(['D',4],[2], [2,3,4,1], [2,3,4,1])
-        Subgroup of permutations = < () >
-        N(1,t)-1: 0  0  0  0
-        N(w,t):   1  1  1  1
-        X(w): 1
-        1
+        ({1: [()]}, 1)
         sage: klr_cyclotomic_dimension(['D',4],[2], [2,3,4,1], [2,4,3,1])
-        Subgroup of permutations = < (1,2) >
-        N(1,t)-1: 0  0  0  0
-        N(w,t):   1  1  1  1
-        X(w): 1
-        1
+        ({1: [(1,2)]}, 1)
         sage: klr_cyclotomic_dimension(['A',2,1],[0], [0,1,2])
-        Subgroup of permutations = < () >
-        N(1,t)-1: 0  0  1
-        N(w,t):   1  1  2
-        X(w): q^2 + 1
-        q^2 + 1
+        ({(q + 1/q)*q: [()]}, q^2 + 1)
         sage: klr_cyclotomic_dimension(['A',2,1],[0], [0,2,1])
-        Subgroup of permutations = < () >
-        N(1,t)-1: 0  0  1
-        N(w,t):   1  1  2
-        X(w): q^2 + 1
-        q^2 + 1
-        sage:
+        ({(q + 1/q)*q: [()]}, q^2 + 1)
         sage: klr_cyclotomic_dimension(['A',2,1],[0], [0,1,2], [0,2,1])
-        Subgroup of permutations = < (1,2) >
-        N(1,t)-1: 0  0  1
-        N(w,t):   1  1  1
-        X(w): q
-        q
+        ({q: [(1,2)]}, q)
         sage: klr_cyclotomic_dimension(['A',1],[1,1],[1],[1])
-        Subgroup of permutations = < () >
-        N(1,t)-1: 1
-        N(w,t):   2
-        X(w): q^2 + 1
-        q^2 + 1
+        ({(q + 1/q)*q: [()]}, q^2 + 1)
         sage: klr_cyclotomic_dimension(['A',1],[1,1],[1],[1])
-        Subgroup of permutations = < () >
-        N(1,t)-1: 1
-        N(w,t):   2
-        X(w): q^2 + 1
-        q^2 + 1
+        ({(q + 1/q)*q: [()]}, q^2 + 1)
         sage: klr_cyclotomic_dimension(['B',3],[2], [2,3,3,2,1])
-        Subgroup of permutations = < (), (1,2), (0,3), (0,3)(1,2) >
-        N(1,t)-1: 0  1 -1  0  1
-        N(w,t):   1  2  0  1  2
-        X(w): 0
-        N(w,t):   1  2  2  1  2
-        X(w): (q^4 + 1)*(q^2 + 1)^2/q^2
-        N(w,t):   1  0 -2  1  2
-        X(w): 0
-        N(w,t):   1  0  0  1  2
-        X(w): 0
-        (q^4 + 1)*(q^2 + 1)^2/q^2
+        ({(q^2 + 1/q^2)*(q + 1/q)^2*q^2: [(1,2)]}, (q^4 + 1)*(q^2 + 1)^2/q^2)
     """
     if verbose:
         def vprint(*args): print(' '.join(f'{a}' for a in args))
@@ -586,9 +1590,31 @@ def FindMinimalCrystalLoops(
     EXAMPLES:
 
         sage: FindMaximalLengthCrystalStrings(['D',8], 4)
+        {1: 2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2, 7: 2, 8: 2}
 
         sage: for i in range(1,7):
         ....:     FindMinimalCrystalLoops(['E',6], L=[i],add_path=True, only_adjacent=2, length=2)
+        []
+        []
+        []
+        [(13, 45*, 54*, '4315465324243', ''),
+        (15, 56*, 65*, '431546532424354', ''),
+        (15, 13*, 31*, '431546532424354', ''),
+        (16, 56*, 65*, '4315465324243514', ''),
+        (16, 13*, 31*, '4315465324243546', ''),
+        (16, 13*, 31*, '4315465324243545', ''),
+        (17, 13*, 31*, '43154653242435456', ''),
+        (17, 13*, 31*, '43154653242435452', ''),
+        (18, 34*, 43*, '431256445254334652', ''),
+        (18, 45*, 54*, '431542234436554132', ''),
+        (18, 13*, 31*, '431546532424354566', ''),
+        (19, 13*, 31*, '4315465324243545662', ''),
+        (22, 34*, 43*, '4312544536362541435452', ''),
+        (22, 24*, 42*, '4312544536362541432453', ''),
+        (24, 24*, 42*, '431245345432624156535443', ''),
+        (29, 45*, 54*, '43125445363625414324532145436', '')]
+        []
+        []
 
     '''
 
@@ -706,9 +1732,31 @@ def FindMinimalCrystalSquares(cry, L, depth=Infinity, verbose=False, add_path=Fa
     EXAMPLES:
 
         sage: FindMaximalLengthCrystalStrings(['D',8], 4)
+        {1: 2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2, 7: 2, 8: 2}
 
         sage: for i in range(1,7):
         ....:     FindMinimalCrystalLoops(['E',6], L=[i],add_path=True, only_adjacent=2, length=2)
+        []
+        []
+        []
+        [(13, 45*, 54*, '4315465324243', ''),
+        (15, 56*, 65*, '431546532424354', ''),
+        (15, 13*, 31*, '431546532424354', ''),
+        (16, 56*, 65*, '4315465324243514', ''),
+        (16, 13*, 31*, '4315465324243546', ''),
+        (16, 13*, 31*, '4315465324243545', ''),
+        (17, 13*, 31*, '43154653242435456', ''),
+        (17, 13*, 31*, '43154653242435452', ''),
+        (18, 34*, 43*, '431256445254334652', ''),
+        (18, 45*, 54*, '431542234436554132', ''),
+        (18, 13*, 31*, '431546532424354566', ''),
+        (19, 13*, 31*, '4315465324243545662', ''),
+        (22, 34*, 43*, '4312544536362541435452', ''),
+        (22, 24*, 42*, '4312544536362541432453', ''),
+        (24, 24*, 42*, '431245345432624156535443', ''),
+        (29, 45*, 54*, '43125445363625414324532145436', '')]
+        []
+        []
 
     '''
 
@@ -835,11 +1883,12 @@ def CrystalGraph(cry, i, **args):
     """
     Return latex code for the given fundamental crystal
     """
+    cry = CartanType(cry)
     Lam = RootSystem(cry).weight_space().basis()
     try:
-        LS = crystals.LSPaths(sum(Lam[j] for j in i))
+        LS = crystals.LSPaths(cry, sum(Lam[j] for j in i))
     except TypeError:
-        LS = crystals.LSPaths(Lam[i])
+        LS = crystals.LSPaths(cry, Lam[i])
     return LS.digraph(subset=LS.subcrystal(**args))
 
 def CrystalGraphPBW(cry, max_depth=3, **args):
@@ -1045,6 +2094,15 @@ def oriented_edges_cartan_type(cart):
 
 
 class KLRWIdempotentDiagram(SageObject):
+    '''
+    Draw a KLRW idempotent diagram given its highest weight ( the red strings),
+    the residues of the solid strings.
+
+    INPUTS::
+
+        - `cartan`: the Cartan type
+        - `wt`:     a list specifying the dominant weight, or red strings
+    '''
 
     # maps from sage's labelling to the labelling of MT
     _cartan_relabelling = {
@@ -1069,8 +2127,8 @@ class KLRWIdempotentDiagram(SageObject):
         `path=(i_1,...,i_n)` in the crystal graph of highest weight `wt` for the
         Cartan type `cartan`.
 
-          - `cartan` is a Cartan type such as ['D',4]
-          - 'wt'     is a list specifying a dominant weight for the  Cartan
+          - `cartan` the Cartan type such as ['D',4]
+          - 'wt'     an ordered list specifying a dominant weight for the  Cartan
 
           If there are n-strings then red_shift = n+1 and:
 
@@ -1083,9 +2141,15 @@ class KLRWIdempotentDiagram(SageObject):
         EXAMPLES:
 
             sage: KLRWIdempotentDiagram(['A',5],[3], [3,2,1,4,3,2,5,4,3])
+            1        2     2        3     3     3  4     4
+            <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+            <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
+            <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
+            1  2     2  3     3     3  3     4     4        5   
 
         """
         self._cartan_type = CartanType(cartan)
+        self._weight_space = self._cartan_type.root_system().weight_space()
 
         # temporarily change the Cartan notation to Kac so that we can extract
         # the data that we need and then restore it to its original format
@@ -1337,7 +2401,7 @@ class KLRWIdempotentDiagram(SageObject):
 
         EXAMPLES:
 
-            sage: d = IdempotentDiagram(['A', 3], [0], [0,0,1,2])
+            sage: d = KLRWIdempotentDiagram(['A', 3], [0], [0,0,1,2])
             sage: latex(d)
         """
         global __KLRW_DIAGRAM_TIKZ__, __KLRW_DIAGRAM__
@@ -1570,7 +2634,21 @@ def tikz_perm(w, top=None, bottom=None):
     EXAMPLES:
 
         sage: print( '\n'.join(tikz_perm(w) for w in SymmetricGroup(6).some_elements()) )
+        \begin{tikzpicture}\foreach \d in {1, 2, 3, 4, 5, 6}{\node[circle,fill=black,minimum width=3pt, inner sep=0pt](t\d)at(\d,1){};\node[circle,fill=black,minimum width=3pt, inner sep=0pt](b\d)at(\d,0){};}\draw (t1)--(b2)  (t2)--(b1)  (t3)--(b3)  (t4)--(b4)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \d in {1, 2, 3, 4, 5, 6}{\node[circle,fill=black,minimum width=3pt, inner sep=0pt](t\d)at(\d,1){};\node[circle,fill=black,minimum width=3pt, inner sep=0pt](b\d)at(\d,0){};}\draw (t1)--(b1)  (t2)--(b3)  (t3)--(b2)  (t4)--(b4)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \d in {1, 2, 3, 4, 5, 6}{\node[circle,fill=black,minimum width=3pt, inner sep=0pt](t\d)at(\d,1){};\node[circle,fill=black,minimum width=3pt, inner sep=0pt](b\d)at(\d,0){};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b4)  (t4)--(b3)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \d in {1, 2, 3, 4, 5, 6}{\node[circle,fill=black,minimum width=3pt, inner sep=0pt](t\d)at(\d,1){};\node[circle,fill=black,minimum width=3pt, inner sep=0pt](b\d)at(\d,0){};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b3)  (t4)--(b5)  (t5)--(b4)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \d in {1, 2, 3, 4, 5, 6}{\node[circle,fill=black,minimum width=3pt, inner sep=0pt](t\d)at(\d,1){};\node[circle,fill=black,minimum width=3pt, inner sep=0pt](b\d)at(\d,0){};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b3)  (t4)--(b4)  (t5)--(b6)  (t6)--(b5);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \d in {1, 2, 3, 4, 5, 6}{\node[circle,fill=black,minimum width=3pt, inner sep=0pt](t\d)at(\d,1){};\node[circle,fill=black,minimum width=3pt, inner sep=0pt](b\d)at(\d,0){};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b3)  (t4)--(b4)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \d in {1, 2, 3, 4, 5, 6}{\node[circle,fill=black,minimum width=3pt, inner sep=0pt](t\d)at(\d,1){};\node[circle,fill=black,minimum width=3pt, inner sep=0pt](b\d)at(\d,0){};}\draw (t1)--(b1)  (t2)--(b3)  (t3)--(b4)  (t4)--(b5)  (t5)--(b6)  (t6)--(b2);\end{tikzpicture}
         sage: print( '\n'.join(tikz_perm(w,list("123456"), list("123456")) for w in SymmetricGroup(6).some_elements()) )
+        \begin{tikzpicture}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](t\c)at(\c,1){\res};}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](b\c)at(\c,0){\res};}\draw (t1)--(b2)  (t2)--(b1)  (t3)--(b3)  (t4)--(b4)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](t\c)at(\c,1){\res};}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](b\c)at(\c,0){\res};}\draw (t1)--(b1)  (t2)--(b3)  (t3)--(b2)  (t4)--(b4)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](t\c)at(\c,1){\res};}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](b\c)at(\c,0){\res};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b4)  (t4)--(b3)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](t\c)at(\c,1){\res};}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](b\c)at(\c,0){\res};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b3)  (t4)--(b5)  (t5)--(b4)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](t\c)at(\c,1){\res};}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](b\c)at(\c,0){\res};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b3)  (t4)--(b4)  (t5)--(b6)  (t6)--(b5);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](t\c)at(\c,1){\res};}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](b\c)at(\c,0){\res};}\draw (t1)--(b1)  (t2)--(b2)  (t3)--(b3)  (t4)--(b4)  (t5)--(b5)  (t6)--(b6);\end{tikzpicture}
+        \begin{tikzpicture}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](t\c)at(\c,1){\res};}\foreach \res [count=\c from 0] in {1,2,3,4,5,6}{\node[circle,draw,inner sep=1pt](b\c)at(\c,0){\res};}\draw (t1)--(b1)  (t2)--(b3)  (t3)--(b4)  (t4)--(b5)  (t5)--(b6)  (t6)--(b2);\end{tikzpicture}
     '''
     W = w.parent()
     if top is None or bottom is None:
