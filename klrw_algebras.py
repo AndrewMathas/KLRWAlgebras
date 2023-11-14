@@ -30,10 +30,23 @@ AUTHORS:
 
 # References
 
-.. [HuShu21] ]J. Hu and L. Shi
-    *Graded dimensions and monomial bases for the cyclotomic quiver Hecke algebras*
+.. [HuShu21] J. Hu and L. Shi
+    *Cellularity and subdivision of KLR and weighted KLRW algebras
     :arxiv:`2108.05508`
 
+'' [MaTu21] A. Mathas and D. Tubbenhauer
+   *Cellularity and subdivision of KLR and weighted KLRW algebras*
+   :arxiv:`2111.12949`
+
+'' [MaTu22] A. Mathas and D. Tubbenhauer
+   *Cellularity for weighted KLRW algebras of types $B$, $A^{(2)}, $D^{(2)}$*
+   J. Lond. Math. Soc. (2) 107 (2023), no. 3, 1002–1044.
+   :doi:`10.1112/jlms.12706`
+   :arxiv:`2201.01998`
+
+'' [MaTu23] A. Mathas and D. Tubbenhauer
+   *Cellularity of KLR and weighted KLRW algebras via crystals*
+   :arxiv:`2309.13867 `
 
     Andrew Mathas
 """
@@ -930,8 +943,23 @@ __KLRW_DIAGRAM__ = r'''
 
 class KLRWString(SageObject):
     '''
-    Create a new KLRW string of type =affine/ghost/red/solid, residue `i` and
-    x-coordinate `xcord`.
+    Create a new KLRW string of type affine/ghost/red/solid, residue `i` and
+    x-coordinate `xcoord`.
+
+    INPUTS::
+
+        - `type`:         The type of the string: 'affine', 'ghost', 'red' or 'solid'
+        - `residue`:      The residue of the string, which is a vertex of the quiver
+        - `xcoord`:       The x-coordinate of the string
+        - `dots`:         The number of dots on the string
+        - `delta`:        The "offset" in the x-coordinate of the string
+        - `ghost_degree`: The number of ghost edges (default: None)
+        - `anchor`:       The index of the (affine) red string that this string is anchored on
+
+    EXAMPLES::
+
+        sage: path = [[4, 5], [4, 5], [3], [3], [2, 3, 4], [2, 3, 4], [1, 2], [1, 2]]
+        sage: KLRWIdempotentDiagram(['A',6], [4,4,3,3,2,2,1,1], path)
     '''
 
     string_repr = {
@@ -941,13 +969,15 @@ class KLRWString(SageObject):
         'solid':  { 'term': '\033[38;5;27m|\033[0m',  'ascii': 'S'},
     }
 
-    def __init__(self, type, residue, xcoord, dots=0, delta=Decimal('0'), ghost_degree=None):
+    def __init__(self, type, residue, xcoord, dots=0, delta=Decimal('0'), ghost_degree=None, anchor=0):
         self.type = type
         self.residue = residue
         self.xcoord = xcoord - delta
         self._raw_x = xcoord
         self.dots = dots
+        self.anchor = anchor
 
+        print(f'ADDING: {type=}, {residue=}, {xcoord=}, {dots=}, {delta=}, {ghost_degree}, {anchor=}')
         # ghosts can have degree 1, 2 or 3
         if self.type == 'ghost':
             self._ghost_style = 'ghost'
@@ -955,7 +985,6 @@ class KLRWString(SageObject):
                 self._ghost_style += ',double'
             elif ghost_degree == 3:
                 self._ghost_style += ',triple'
-
 
     def is_ghost(self):
         return self.type == 'ghost'
@@ -1009,7 +1038,7 @@ class KLRWString(SageObject):
 def oriented_edges_cartan_type(cart):
     '''
     Return the oriented edges of a Dynkin diagram following the conventions of
-    [MT]_
+    [MaTu23]_
     '''
     # Navigating the internal representation of Cartan types in sage is a
     # nightmare. Fortunately, we can navigate this using the compact form of
@@ -1066,14 +1095,23 @@ def oriented_edges_cartan_type(cart):
 
 
 class KLRWIdempotentDiagram(SageObject):
-    '''
+    r'''
     Draw a KLRW idempotent diagram given its highest weight ( the red strings),
     the residues of the solid strings.
 
     INPUTS::
 
-        - `cartan`: the Cartan type
-        - `wt`:     a list specifying the dominant weight, or red strings
+        - `cartan`:  The Cartan type
+        - `wt`:      A list specifying the dominant weight, or red strings
+        - `path`:    A residue sequence for a level 1 path, or an $\ell$-tuple of residues
+        - `vertex`:  The name of the sink vertex in the crystal graph (used only in LaTeXing)
+        - `shift`:   The ghost shift (default: `1`)
+        - `epsilon`: Sets the string separation when LaTeXing diagrams (default `0.08`)
+        - `relabel': Set to `True` to use the Dynkin diagram conventions of [MT]_ (default: `False`)
+        - `debug`:   Set to `True` to enable debugging (default: `False`)
+
+
+    The `path` 
     '''
 
     # maps from sage's labelling to the labelling of MT
@@ -1138,15 +1176,27 @@ class KLRWIdempotentDiagram(SageObject):
         self._vertex = vertex
         self._wt = wt
 
-        if isinstance(path, str):
-            self._path = [int(i) for i in path]
-        else:
-            self._path = path
-
+        #
         if relabel:
-            self._path = [ self._lebaler(i) for i in self._path ]
             self._wt = [ self._lebaler(i) for i in self._wt]
+            convert = self._lebaler
+        else:
+            convert = lambda i: i
 
+        if isinstance(path, str):
+            self._path = [[convert(int(i)) for i in path]]
+        elif isinstance(path, list):
+            if path == []:
+                self._path = []
+            elif isinstance(path[0], int): # assume [0,1,2]
+                self._path = [[convert(i) for i in path]]
+            elif isinstance(path[0], str): # assume ['012', '231', ...]
+                self._path = [ [convert(int(i)) for i in p] for p in path]
+            elif isinstance(path[0], list): # assume [[0,1,2],[2,3,1], ...]
+                self._path = [ [convert(i) for i in p] for p in path]
+
+        if not hasattr(self, '_path'):
+            raise TypeError(f'unrecognised path specification: {path=}')
 
         # keep track of whether we have added to the LaTeX preamble
         self._have_added_latex_preamble = False
@@ -1177,16 +1227,17 @@ class KLRWIdempotentDiagram(SageObject):
         # This list will contain the red strings in the diagram
         self._red_strings = []
         for k,i in enumerate(self._wt):
-            self.place_string('red', i, Decimal(f'{k}')*self._red_shift)
+            self.place_string('red', i, Decimal(f'{k}')*self._red_shift, k)
             self._red_strings.append( Decimal(f'{k}')*self._red_shift )
 
         # This list will contain the affine strings in the diagram
         self._affine_strings = []
 
         # now add the strings in the path to the diagram
-        for i in self._path:
-            self._solid += Decimal('1')
-            self.add_string(i)
+        for red in range(len(self._path)):
+            for i in self._path[red]:
+                self._solid += Decimal('1')  # increment the number of solid strings
+                self.add_string(i, red)      # add a new solid i-string to component `red`
 
         # and finally add any necessary dots to the solid and ghost strings
         last_i = -1
@@ -1204,11 +1255,11 @@ class KLRWIdempotentDiagram(SageObject):
                 last_i = self.strings[x].residue
 
 
-    def add_string(self, i):
+    def add_string(self, i, red):
         """
-        Add a solid (and ghost) string of residue `i`, and any ghosts, to the
-        diagram by putting the string on the left-hand side and then dragging
-        it as far as possible to the right.
+        Add a solid string of residue `i`, together with any ghost strinngs, to
+        the diagram by putting the string on the left-hand side of the `red`th
+        red string and then dragging it as far as possible to the right.
 
         ALGORITHM:
 
@@ -1227,9 +1278,11 @@ class KLRWIdempotentDiagram(SageObject):
         positions.append( Decimal(f'{positions[-1]}')+self._red_shift*Decimal('10'))
         self.debug('\n'+f'Placing the {self._solid}th solid {i}-string.  {positions=}')
 
-        # initially the solid and ghost strings are left of everything
+        # initially the solid and ghost strings are left of the red string `red`
         g = 0
-        s = 0
+        while g<len(positions) and self.strings[positions[g]].anchor < red:
+            g += 1
+        s = g
 
         while placing_i and s < len(positions)-1:
             # residues, types and Cartan entries of the adjacent strings
@@ -1253,22 +1306,21 @@ class KLRWIdempotentDiagram(SageObject):
 
                 if solid_blocked:
                     # place new solid string here
+                    self.debug(f' -> place solid string before #{s} with anchor={self.strings[positions[s]].anchor}')
+                    self.place_string('solid', i, self.strings[positions[s]]._raw_x, self.strings[positions[s]].anchor )
                     placing_i = False
-                    self.debug(f' -> place solid string before #{s}')
-                    self.place_string('solid', i, self.strings[positions[s]]._raw_x )
 
                 else:
                     s += 1
 
             elif positions[s]-self._ghost_shift == positions[g]:
-                # solid and ghost are both adjacent toexisting strings
+                # solid and ghost are both adjacent to existing strings
                 self.debug(f' - solid and ghost adjacent: {s=}, {g=}')
 
                 if solid_blocked or ghost_blocked:
                     # place new solid and ghost strings here
-                    placing_i = False
-                    self.debug(f' ! stopped with {i=}, {s=}, {g=} and {cis=}, {cig=}')
-                    self.place_string('solid', i, self.strings[positions[s]]._raw_x )
+                    self.debug(f' ! stopped with {i=}, {s=}, {g=} and {cis=}, {cig=}, s-anchor={self.strings[positions[s]].anchor}')
+                    self.place_string('solid', i, self.strings[positions[s]]._raw_x, self.strings[positions[s]].anchor )
                     placing_i = False
 
                 else:
@@ -1280,9 +1332,9 @@ class KLRWIdempotentDiagram(SageObject):
                 self.debug(f' - ghost adjacent: {s=}, {g=}')
 
                 if ghost_blocked:
-                    placing_i = False
                     self.debug(f' ! stopped with {i=}, {s=}, {g=} and {cis=}, {cig=}')
-                    self.place_string('solid', i, self.strings[positions[g]]._raw_x - self._ghost_shift )
+                    self.place_string('solid', i, self.strings[positions[g]]._raw_x - self._ghost_shift, self.strings[positions[g]].anchor )
+                    placing_i = False
 
                 else:
                     g += 1
@@ -1290,7 +1342,7 @@ class KLRWIdempotentDiagram(SageObject):
         if placing_i:
             # if i has not yet been placed then it sits on an affine string
             self.add_affine_string(i)
-            self.place_string('solid', i, self._affine_strings[-1]  )
+            self.place_string('solid', i, self._affine_strings[-1], len(self._red_strings)+len(self._affine_strings))
 
 
     def add_affine_string(self, residue):
@@ -1301,20 +1353,20 @@ class KLRWIdempotentDiagram(SageObject):
         the diagram
         """
         xcoord = self._red_shift*len(self._red_strings+self._affine_strings)
-        self.place_string('affine', residue,xcoord)
         self._affine_strings.append( xcoord )
+        self.place_string('affine', residue,xcoord, anchor=len(self._red_strings)+len(self._affine_strings))
 
 
-    def place_string(self, type, residue, xcoord):
+    def place_string(self, type, residue, xcoord, anchor):
         """
         Add the specified string to the diagram before string `s`
         """
-        self.debug(f'Adding a new {residue}-{type} string with {xcoord=}')
+        self.debug(f'Adding a new {residue}-{type} string with {xcoord=} and {anchor=}')
 
         # solid and ghost strings are shifted by epsilon times the string number
         if type == 'solid':
             delta = self._solid*self._epsilon
-            s = KLRWString('solid', residue, xcoord, delta=delta)
+            s = KLRWString('solid', residue, xcoord, delta=delta, anchor=anchor)
             self.strings[s.xcoord] = s
 
             if self._ghost_degree[residue] > 0:
@@ -1322,12 +1374,13 @@ class KLRWIdempotentDiagram(SageObject):
                         residue      = residue,
                         xcoord       = xcoord+self._ghost_shift,
                         delta        = delta,
-                        ghost_degree = self._ghost_degree[residue]
+                        ghost_degree = self._ghost_degree[residue],
+                        anchor       = anchor
                 )
                 self.strings[s.xcoord] = s
 
         else:
-            self.strings[xcoord] = KLRWString(type, residue, xcoord)
+            self.strings[xcoord] = KLRWString(type, residue, xcoord, anchor=anchor)
 
     def _str(self, i):
         """
@@ -1534,7 +1587,7 @@ class KLRWIdempotentDiagram(SageObject):
 
 
 def KLRW_Idempotents(cart, L, n, latex=False, verbose=False):
-    '''
+    r'''
     Return a list of the KLRW idempotents indexed by their paths
 
     EXAMPLES:
