@@ -1,12 +1,11 @@
-\documentclass{ltxdoc}
+\documentclass{amsart}
 \usepackage[margin=12mm]{geometry}
 \parindent = 0pt
 \usepackage[svgnames]{xcolor}
 
-\usepackage{tcolorbox}
-\tcbuselibrary{skins, listings}
+\usepackage[skins,listings]{tcolorbox}
 
-\NewTotalTCBox\keyword{ O{yellow} v !O{} }{
+\NewTotalTCBox\keyword{ O{} v }{
   fontupper=\sffamily,
   nobeforeafter,
   skin=tile,
@@ -14,24 +13,45 @@
   top=0pt,bottom=0pt,left=0mm,right=0mm,
   colback=yellow!10!white,
   colupper=ForestGreen,
-  %leftrule=0pt,rightrule=0pt,toprule=0.3mm,bottomrule=0.3mm,boxsep=0.5mm,
-  #3}{#2}
+  #1}
+{#2}
 
-\DeclareTCBListing{codeexample}{O{}}{%
-  enhanced,frame hidden,
-  top=0pt,bottom=0pt,left=0pt,right=0pt,arc=0pt,boxrule=0pt,
-  colback=blue!25!white,
-  listing style=example,
-  sidebyside,text and listing,text outside listing,sidebyside gap=2mm,
-  lefthand width=40mm,tikz lower,fillbackground,
+\lstdefinestyle{tikz}{style=tcblatex,
+  classoffset=0,
+  texcsstyle=*\color{blue},%
+  deletetexcs={begin,end},
+  moretexcs={,%
+    pgfdeclarehorizontalshading,
+    pgfuseshading,
+    node,
+    useasboundingbox,
+    draw
+  },%
+  classoffset=1,
+  keywordstyle=\color{MediumBlue},%
+  morekeywords={tikzpicture,shade,fill,draw,path,node,child,line,width,rectangle},
+  classoffset=2,
+  keywordstyle=\color{ForestGreen},%
+  morekeywords={solid,dot,list,affine,red,ghost, no}
+}
+
+\DeclareTCBListing{tikzcode}{ !O{} }{%
+  skin=bicolor,
+  colframe=NavyBlue,
+  colbacklower=Lavender,
+  colback=LightYellow,
+  lefthand width=50mm,
+  listing style=tikz,
+  sidebyside,
+  sidebyside gap=4mm,
+  text and listing,
+  text outside listing,
+  tikz lower,
   #1
 }
 
-
 \usepackage{tikz}
 \usetikzlibrary{decorations.markings,decorations.pathreplacing}
-
-
 
 % \usepackage{calc}
 % \input{pgfmanual-en-macros.tex}
@@ -119,8 +139,7 @@
       mark=at position #1 with {
         \node[text=\pgfkeysvalueof{/tikz/solid colour}]{$\bullet$};
         \node[text=\pgfkeysvalueof{/tikz/ghost colour},
-              draw ghost string,
-              shift={(\pgfkeysvalueof{/tikz/ghost shift},0)}]{$\bullet$};
+              xshift=\pgfkeysvalueof{/tikz/ghost shift}]{$\bullet$};
       },
     },
     postaction={
@@ -137,27 +156,26 @@
 
   \section{Strings in KLRW diagrams}
 
-  Use the \keyword{solid} style to draw solid strings. By default, solid
-  strings come with ghost strings:
+  Use the \keyword{solid} style to draw solid strings:
 
-  \begin{codeexample}[bounding box=(-1,-1) and (3.4,2)]
+  \begin{tikzcode}
     \begin{tikzpicture}
       \draw[solid](0,0)--++(0,0.6)--++(1.1,0.6)--++(0,0.6);
       \draw[solid](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
       \draw[solid](2.2,0)--++(0,1.8);
     \end{tikzpicture}
-  \end{codeexample}
+  \end{tikzcode}
 
-  If your solid string does not have a ghost then add the style
-  \keyword{no ghost}:
+  By default, solid strings come with ghost strings. If a solid
+  string does not have a ghost then add the style \keyword{no ghost}:
 
-  \begin{codeexample}[]
+  \begin{tikzcode}
     \begin{tikzpicture}
       \draw[solid](0,0)--++(0,0.6)--++(1.1,0.6)--++(0,0.6);
       \draw[solid, no ghost](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
       \draw[solid](2.2,0)--++(0,1.8);
     \end{tikzpicture}
-  \end{codeexample}
+  \end{tikzcode}
 
 
   Optionally, you can specify the \keyword{residue} of a solid string,
@@ -165,59 +183,50 @@
   solid strings appear below the strings and the label for ghost strings
   appear above them.
 
-  \begin{codeexample}[]
+  \begin{tikzcode}
     \begin{tikzpicture}
       \draw[solid=1](0,0)--++(0,0.6)--++(1.1,0.6)--++(0,0.6);
-      \draw[solid=i](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
+      \draw[solid=i, no ghost](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
       \draw[solid](2.2,0)--++(0,1.8);
     \end{tikzpicture}
-  \end{codeexample}
+  \end{tikzcode}
 
   Dots can be added to a solid string, and its ghost, by using the
-  \keyword{dot} style. By default, the dots appear in the middle of the
+  \keyword{dot} style, \textit{which must appear before the other
+  style commands}. By default, the dots appear in the middle of the
   string, which can be adjusted by giving \keyword{dot} a value between
   $0$ and $1$:
 
-  \begin{codeexample}[]
+  \begin{tikzcode}
     \begin{tikzpicture}
       \draw[solid=1](0,0)--++(0,0.6)--++(1.1,0.6)--++(0,0.6);
-      \draw[solid=i, dot=0.4](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
+      \draw[solid=i, no ghost, dot=0.8](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
       \draw[dot, solid](2.2,0)--++(0,1.8);
     \end{tikzpicture}
-  \end{codeexample}
+  \end{tikzcode}
 
   For multiple dots, use \keyword{dot/.list}$=\{...\}$:
 
-  \begin{codeexample}[]
+  \begin{tikzcode}
     \begin{tikzpicture}
       \draw[solid=1](0,0)--++(0,0.6)--++(1.1,0.6)--++(0,0.6);
-      \draw[solid=i, dot=0.4](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
+      \draw[solid=i, no ghost, dot=0.8](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
       \draw[dot/.list={0.2,0.4,0.8}, solid](2.2,0)--++(0,1.8);
     \end{tikzpicture}
-  \end{codeexample}
+  \end{tikzcode}
 
-  Finally, KLRW diagrams also contain \keyword{red} strings:
+  Finally, KLRW diagrams also contain \keyword{red} strings and
+  \keyword{affine} red strings:
 
-  \begin{codeexample}[]
+  \begin{tikzcode}
     \begin{tikzpicture}
-      \draw[red=\rho] (1.2,0)--+(0,1.8);
-      \draw[solid=1](0,0)--++(0,0.6)--++(1.1,0.6)--++(0,0.6);
-      \draw[solid=i, dot=0.4](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
-      \draw[dot/.list={0.2,0.4,0.8}, solid](2.2,0)--++(0,1.8);
-    \end{tikzpicture}
-  \end{codeexample}
-
-  and \keyword{affine} red strings:
-
-  \begin{codeexample}[]
-    \begin{tikzpicture}
-      \draw[affine=0] (1.2,0)--+(0,1.8);
+      \draw[red=0] (1.2,0)--+(0,1.8);
       \draw[affine=0] (2.3,0)--+(0,1.8);
       \draw[solid=1](0,0)--++(0,0.6)--++(1.1,0.6)--++(0,0.6);
-      \draw[solid=i, dot=0.4](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
+      \draw[solid=i, no ghost, dot=0.8](1.1,0)--++(0,0.6)--++(-1.1,0.6)--++(0,0.6);
       \draw[dot/.list={0.2,0.4,0.8}, solid](2.2,0)--++(0,1.8);
     \end{tikzpicture}
-  \end{codeexample}
+  \end{tikzcode}
 
-\end{document}documentclass
+\end{document}
 
