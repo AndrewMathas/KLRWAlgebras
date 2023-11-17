@@ -1,0 +1,258 @@
+%% ----------------------------------------------------------------
+%% klrw_diagrams --- A latex package for drawing KLRW diagrams
+%% E-mail: andrew.mathas@gmail.com
+%% Released under the LaTeX Project Public License v1.3c or later
+%% See http://www.latex-project.org/lppl.txt
+%% ----------------------------------------------------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\def\klrw@version{Version 1.0-- 2023/11/11}
+\ProvidesPackage{klrw_diagrams}
+  [\klrw@version\space- A package for drawing weighted KLRW diagrams]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% required packages
+\RequirePackage{xcolor}
+\XC@append\XC@@names {%
+  \definecolorstrue%
+  \input{svgnam.def}%
+  \definecolorstrue%
+  \let\colornameprefix%
+  \XC@@nameprefix%
+}
+\RequirePackage{xparse}
+\RequirePackage{tikz}
+\usetikzlibrary{decorations.markings,decorations.pathreplacing}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TikZ style settings
+
+\tikzset{
+  % centering commands
+  anchorbase/.style={baseline={([yshift=#1]current bounding box.center)}},
+  anchorbase/.default={-0.5ex},
+  % default string colours
+  affine colour/.initial=orange,
+  affine color/.style={affine colour=#1},
+  red colour/.initial=red,
+  red color/.style={red colour=#1},
+  ghost colour/.initial=gray,
+  ghost color/.style={ghost colour=#1},
+  ghost shift/.initial=1,
+  solid colour/.initial=blue,
+  solid color/.style={solid colour=#1},
+  % KLRW node and string styles
+  klrw node/.style = {
+  },
+  klrw string/.style = {
+     very thick,
+     rounded corners,
+  },
+  % string labels
+  klrw label/.style = {
+      font=\scriptsize,
+  },
+  add string label/.style 2 args= { % colour, label
+    decoration = {
+      markings,
+      mark = at position 0 with {
+          \node[below, klrw label, text={\pgfkeysvalueof{/tikz/#1 colour}}]  {$#2$}; },
+    },
+    preaction = { decorate }
+  },
+  add ghost label/.style 2 args = { % offset, label
+    decoration = {
+      markings,
+      mark = at position 1 with {
+          \node[above, klrw label,
+                text={\pgfkeysvalueof{/tikz/ghost colour}},
+                shift={(#1, 0)}] {$#2$};
+      },
+    },
+    preaction = { decorate }
+  },
+  % red, affine solid and ghost strings
+  red string/.style = {
+    klrw string,
+    double=\pgfkeysvalueof{/tikz/red colour}!40,
+    draw=\pgfkeysvalueof{/tikz/red colour},
+    double distance = 1pt,
+    add string label = {red}{#1},
+  },
+  affine/.style = {
+    klrw string,
+    double=\pgfkeysvalueof{/tikz/affine colour}!40,
+    draw=\pgfkeysvalueof{/tikz/affine colour},
+    double distance = 1pt,
+    add string label = {affine}#1,
+  },
+  solid/.style = {
+    klrw string,
+    draw=\pgfkeysvalueof{/tikz/solid colour},
+    add string label = {solid}{#1},
+  },
+  ghost/.style = {
+    draw ghost string,
+    add ghost label = { 0 }{ #1 },
+  },
+  draw ghost string/.style = {
+    klrw string,
+    draw=\pgfkeysvalueof{/tikz/ghost colour},
+    dashed,
+  },
+  double ghost/.style = {
+    draw ghost string,
+    double,
+  },
+  % solid strings with ghosts
+  solid ghost/.style = {
+      solid = #1,
+      preaction={
+          draw ghost string,
+          dashed,
+          transform canvas={shift={(\pgfkeysvalueof{/tikz/ghost shift},0)}}
+      },
+      add ghost label = { \pgfkeysvalueof{/tikz/ghost shift} }{ #1 },
+  },
+  % dots on strings
+  dot/.style = {
+    decoration={
+      markings,
+      mark=at position #1 with {
+        \node[text=\pgfkeysvalueof{/tikz/solid colour}]{$\bullet$};
+        \node[text=\pgfkeysvalueof{/tikz/ghost colour},
+              xshift=\pgfkeysvalueof{/tikz/ghost shift}]{$\bullet$};
+      },
+    },
+    postaction={
+      decorate
+    },
+  },
+  dot/.default=0.5,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% idempotent diagrams of affine types A^{(1)}, A^{(2)}, C^{(1) and D^{(1)}
+
+% \DottedIdempotent(distance)[dots]{e-1}{residues}
+\NewDocumentCommand\DottedIdempotentA{ D(){3} omm} {
+  \begin{tikzpicture}[anchorbase]
+    \def\residues{{#4}}
+    \foreach \res [count=\c,
+                   evaluate=\res as \pos using {\res<=#3 ? #1*\res-\c*#1/15 : #1*(\res-2)-\c*#1/15}
+        ] in {#4} {
+          \coordinate (\c) at (\pos,0);
+          \draw[solid=\res](\c)--++(0,1);
+          \ifnum\res=#3\relax\else
+              \draw[ghost=\res](\pos+#1,0)--++(0,1);
+          \fi
+          \ifnum\c=1\relax
+              \draw[red string=\res](\pos+#1/15,0)--++(0,1);
+          \fi
+    }
+    \foreach \pt [evaluate=\pt as \good using {\residues[\pt-1]==#3 ? 0 : 1} ] in {#2} {
+      \draw[dot, solid](\pt)--++(0,1);
+      \ifnum\good=1
+          \draw[dot, ghost]([shift={(#1,0)}]\pt)--++(0,1);
+      \fi
+    }
+  \end{tikzpicture}
+}
+
+% \DottedIdempotentAA*(distance)[dots]{e}{residues}
+\NewDocumentCommand\DottedIdempotentAA{ s D(){3} O{} mm} {%
+  \begin{tikzpicture}[anchorbase]
+    \def\residues{{#5}}
+    \foreach \res [count=\c, evaluate=\res as \pos using {\res<=#4 ? #2*\res-\c*#2/15 : #2*(\res-2)-\c*#2/15}] in {#5} {
+      \coordinate (\c) at (\pos,0);
+      \draw[solid=\res](\c)--++(0,1);
+      \ifnum\res=#4\relax\else
+        \draw[ghost=\res](\pos+#2,0)--++(0,1);
+      \fi
+      \ifnum\c=1\relax
+        \IfBooleanTF{#1}{\draw[affine=\res](\pos+#2/15,0)--++(0,1);}
+                        {\draw[red string=\res](\pos+#2/15,0)--++(0,1);}
+      \fi
+    }
+    \foreach \pt [evaluate=\pt as \good using {\residues[\pt-1]==#4 ? 0 : 1}] in {#3} {
+      \draw[dot, solid](\pt)--++(0,1);
+      \ifnum\good=1
+          \draw[dot, ghost]([shift={(#2,0)}]\pt)--++(0,1);
+      \fi
+    }
+  \end{tikzpicture}%
+}
+
+% \DottedCIdempotentC(distance)[dots]<k>{e-1}{residues}
+% KLRW diagram for (dotted) idempotent diagram of type C^{(1)}_e and weight Lambda_k and residue i
+\NewDocumentCommand\DottedIdempotentC{ D(){3} o D<>{0} mm} {%
+  \begin{tikzpicture}[anchorbase,
+    declare function={
+        position(\x,\c)=\x<=#4 ? #1*\x-\c*#1/15 : #1*(\x-2)-\c*#1/15;
+    }
+    ]
+    \def\residues{{#5}}
+    \foreach \res [count=\c, evaluate=\res as \pos using {position(\res,\c)-position(#3,0)}] in {#5} {
+      \coordinate (\c) at (\pos,0);
+      \draw[solid=\res](\c)--++(0,1);
+      \ifnum\res=#4\relax\else
+        \draw[ghost=\res](\pos+#1,0)--++(0,1);
+      \fi
+      \ifnum\c=1\relax
+        \draw[red string=\res](\pos+#1/15,0)--++(0,1);
+      \fi
+    }
+    \foreach \pt [evaluate=\pt as \good using {\residues[\pt-1]==#4 ? 0 : 1} ] in {#2} {
+      \draw[dot, solid](\pt)--++(0,1);
+      \ifnum\good=1
+        \draw[dot, ghost]([shift={(#1,0)}]\pt)--++(0,1);
+      \fi
+    }
+  \end{tikzpicture}%
+}
+
+% \DottedIdempotentD*(distance)[dots]{e}{residues}
+\NewDocumentCommand\DottedIdempotentD{ s D(){3} O{} mm} {%
+  \begin{tikzpicture}[anchorbase]
+    \def\residues{{#5}}
+    \foreach \res [count=\c, evaluate=\res as \pos using {\res==0 ? #2*\res-\c*#2/15 : #2*(\res-2)-\c*#2/15} ] in {#5} {
+      \coordinate (\c) at (\pos,0);
+      \draw[solid=\res](\c)--++(0,1);
+      \ifnum\res=#4\relax
+      \else
+        \ifnum\res=1
+          \draw[double,ghost=\res](\pos+#2,0)--++(0,1);
+        \else
+          \ifnum\res>0
+            \draw[ghost=\res](\pos+#2,0)--++(0,1);
+          \fi
+        \fi
+      \fi
+      \ifnum\c=1\relax
+        \IfBooleanTF{#1}
+          {\draw[affine=\res](\pos+#2/15,0)--++(0,1);}
+          {\draw[red string=\res](\pos+#2/15,0)--++(0,1);}
+      \fi
+    }
+    \foreach \pt [evaluate=\pt as \res using {\residues[\pt-1]}] in {#3} {
+      \draw[dot, solid](\pt)--++(0,1);
+      \ifnum\res>1
+        \ifnum\res<#4 \draw[dot, ghost]([shift={(#2,0)}]\pt)--++(0,1);\fi
+      \fi
+    }
+  \end{tikzpicture}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\endinput
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CHANGE LOG
+%%
+%% Version 0.1
+%%    o basic implementation extracted from the papers
+%%        - Cellularity for weighted KLRW algebras of types B, A(2), D(2)
+%%        - Subdivision and cellularity for weighted KLRW algebras
+%%
