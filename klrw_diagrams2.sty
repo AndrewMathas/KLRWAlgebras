@@ -59,7 +59,7 @@
       mark = at position 0 with {
           \node[below, klrw label, text={\pgfkeysvalueof{/tikz/#1 colour}}]  {$#2$}; },
     },
-    preaction = { decorate }
+    postaction = { decorate }
   },
   add ghost label/.style 2 args = { % offset, label
     decoration = {
@@ -70,7 +70,7 @@
                 shift={(#1, 0)}] {$#2$};
       },
     },
-    preaction = { decorate }
+    postaction = { decorate }
   },
   % red, affine solid and ghost strings
   red string/.style = {
@@ -125,7 +125,7 @@
               xshift=\pgfkeysvalueof{/tikz/ghost shift}]{$\bullet$};
       },
     },
-    postaction={
+    preaction={
       decorate
     },
   },
