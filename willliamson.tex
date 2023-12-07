@@ -1,55 +1,183 @@
 \documentclass{amsart}
-
-\title{}
-\author{Andrew Mathas}
-
-\usepackage{}
+\usepackage[margin=4mm,landscape,a3paper]{geometry}
+\usepackage[svgnames]{xcolor}
+\usepackage{klrw_diagrams2}
 
 \begin{document}
 
-\begin{tikzpicture}[scale=2]
-  \draw[redstring](0,0)node[below]{ $4$ }--+(0,1);
-  \draw[redstring](9,0)node[below]{ $4$ }--+(0,1);
-  \draw[redstring](18,0)node[below]{ $3$ }--+(0,1);
-  \draw[redstring](27,0)node[below]{ $3$ }--+(0,1);
-  \draw[redstring](36,0)node[below]{ $2$ }--+(0,1);
-  \draw[redstring](45,0)node[below]{ $2$ }--+(0,1);
-  \draw[redstring](54,0)node[below]{ $1$ }--+(0,1);
-  \draw[redstring](63,0)node[below]{ $1$ }--+(0,1);
-  \draw[solid](-0.08,0)node[below]{ $4$ }--+(0,1);
-  \draw[ghost](0.92,0)--+(0,1)node[above]{ $4$ };
-  \draw[solid](0.84,0)node[below]{ $5$ }--+(0,1);
-  \draw[ghost](1.84,0)--+(0,1)node[above]{ $5$ };
-  \draw[solid](8.76,0)node[below]{ $4$ }--+(0,1);
-  \draw[ghost](9.76,0)--+(0,1)node[above]{ $4$ };
-  \draw[solid](9.68,0)node[below]{ $5$ }--+(0,1);
-  \draw[ghost](10.68,0)--+(0,1)node[above]{ $5$ };
-  \draw[solid](17.60,0)node[below]{ $3$ }--+(0,1);
-  \draw[ghost](18.60,0)--+(0,1)node[above]{ $3$ };
-  \draw[solid](26.52,0)node[below]{ $3$ }--+(0,1);
-  \draw[ghost](27.52,0)--+(0,1)node[above]{ $3$ };
-  \draw[solid](35.44,0)node[below]{ $2$ }--+(0,1);
-  \draw[ghost](36.44,0)--+(0,1)node[above]{ $2$ };
-  \draw[solid](36.36,0)node[below]{ $3$ }--+(0,1);
-  \draw[ghost](37.36,0)--+(0,1)node[above]{ $3$ };
-  \draw[solid](37.28,0)node[below]{ $4$ }--+(0,1);
-  \draw[ghost](38.28,0)--+(0,1)node[above]{ $4$ };
-  \draw[solid](44.20,0)node[below]{ $2$ }--+(0,1);
-  \draw[ghost](45.20,0)--+(0,1)node[above]{ $2$ };
-  \draw[solid](45.12,0)node[below]{ $3$ }--+(0,1);
-  \draw[ghost](46.12,0)--+(0,1)node[above]{ $3$ };
-  \draw[solid](46.04,0)node[below]{ $4$ }--+(0,1);
-  \draw[ghost](47.04,0)--+(0,1)node[above]{ $4$ };
-  \draw[solid](52.96,0)node[below]{ $1$ }--+(0,1);
-  \draw[ghost](53.96,0)--+(0,1)node[above]{ $1$ };
-  \draw[solid](53.88,0)node[below]{ $2$ }--+(0,1);
-  \draw[ghost](54.88,0)--+(0,1)node[above]{ $2$ };
-  \draw[solid](61.80,0)node[below]{ $1$ }--+(0,1);
-  \draw[ghost](62.80,0)--+(0,1)node[above]{ $1$ };
-  \draw[solid](62.72,0)node[below]{ $2$ }--+(0,1);
-  \draw[ghost](63.72,0)--+(0,1)node[above]{ $2$ };
+\begin{center}
+    \large Geordie's example in type $A_\infty$ for
+    $\Lambda=2\Lambda_4+2\Lambda_3+2\Lambda_2+2\Lambda_1$.
+\end{center}
+
+% idempotent
+\begin{tikzpicture}[xscale=0.6, yscale=2]
+  \draw[red string=4](0,0)--+(0,1);
+  \draw[red string=4](9,0)--+(0,1);
+  \draw[red string=3](18,0)--+(0,1);
+  \draw[red string=3](27,0)--+(0,1);
+  \draw[red string=2](36,0)--+(0,1);
+  \draw[red string=2](45,0)--+(0,1);
+  \draw[red string=1](54,0)--+(0,1);
+  \draw[red string=1](63,0)--+(0,1);
+  \foreach \pt [count=\c] in {-0.08, 0.84, 8.76, 9.68, 17.60, 26.52, 35.44,
+             36.36, 37.28, 44.20, 45.12, 46.04, 52.96, 53.88, 61.80, 62.72}
+  {
+    \coordinate (b\c) at (\pt,0);
+    \coordinate (t\c) at (\pt,1);
+  }
+  \draw[solid ghost=4](b1)--(t1);
+  \draw[solid ghost=5](b2)--(t2);
+  \draw[solid ghost=4](b3)--(t3);
+  \draw[solid ghost=5](b4)--(t4);
+  \draw[solid ghost=3](b5)--(t5);
+  \draw[solid ghost=3](b6)--(t6);
+  \draw[solid ghost=2](b7)--(t7);
+  \draw[solid ghost=3](b8)--(t8);
+  \draw[solid ghost=4](b9)--(t9);
+  \draw[solid ghost=2](b10)--(t10);
+  \draw[solid ghost=3](b11)--(t11);
+  \draw[solid ghost=4](b12)--(t12);
+  \draw[solid ghost=1](b13)--(t13);
+  \draw[solid ghost=2](b14)--(t14);
+  \draw[solid ghost=1](b15)--(t15);
+  \draw[solid ghost=2](b16)--(t16);
 \end{tikzpicture}
 
+% 1
+\begin{tikzpicture}[xscale=0.6, yscale=2]
+  \draw[red string=4](0,0)--+(0,1);
+  \draw[red string=4](9,0)--+(0,1);
+  \draw[red string=3](18,0)--+(0,1);
+  \draw[red string=3](27,0)--+(0,1);
+  \draw[red string=2](36,0)--+(0,1);
+  \draw[red string=2](45,0)--+(0,1);
+  \draw[red string=1](54,0)--+(0,1);
+  \draw[red string=1](63,0)--+(0,1);
+  \foreach \pt [count=\c] in {-0.08, 0.84, 8.76, 9.68, 17.60, 26.52, 35.44,
+             36.36, 37.28, 44.20, 45.12, 46.04, 52.96, 53.88, 61.80, 62.72}
+  {
+    \coordinate (b\c) at (\pt,0);
+    \coordinate (t\c) at (\pt,1);
+  }
+  \draw[solid ghost=4](b1)--(t3);
+  \draw[solid ghost=5](b2)--(t4);
+  \draw[solid ghost=4](b3)--(t1);
+  \draw[solid ghost=5](b4)--(t2);
+  \draw[solid ghost=3](b5)--(t5);
+  \draw[solid ghost=3](b6)--(t6);
+  \draw[solid ghost=2](b7)--(t10);
+  \draw[solid ghost=3](b8)--(t11);
+  \draw[solid ghost=4](b9)--(t12);
+  \draw[solid ghost=2](b10)--(t7);
+  \draw[solid ghost=3](b11)--(t8);
+  \draw[solid ghost=4](b12)--(t9);
+  \draw[solid ghost=1](b13)--(t13);
+  \draw[solid ghost=2](b14)--(t14);
+  \draw[solid ghost=1](b15)--(t15);
+  \draw[solid ghost=2](b16)--(t16);
+\end{tikzpicture}
 
+% 2
+\begin{tikzpicture}[xscale=0.6, yscale=2]
+  \draw[red string=4](0,0)--+(0,1);
+  \draw[red string=4](9,0)--+(0,1);
+  \draw[red string=3](18,0)--+(0,1);
+  \draw[red string=3](27,0)--+(0,1);
+  \draw[red string=2](36,0)--+(0,1);
+  \draw[red string=2](45,0)--+(0,1);
+  \draw[red string=1](54,0)--+(0,1);
+  \draw[red string=1](63,0)--+(0,1);
+  \foreach \pt [count=\c] in {-0.08, 0.84, 8.76, 9.68, 17.60, 26.52, 35.44,
+             36.36, 37.28, 44.20, 45.12, 46.04, 52.96, 53.88, 61.80, 62.72}
+  {
+    \coordinate (b\c) at (\pt,0);
+    \coordinate (t\c) at (\pt,1);
+  }
+  \draw[solid ghost=4](b1)--(t1);
+  \draw[solid ghost=5](b2)--(t2);
+  \draw[solid ghost=4](b3)--(t3);
+  \draw[solid ghost=5](b4)--(t4);
+  \draw[solid ghost=3](b5)--(t5);
+  \draw[solid ghost=3](b6)--(t6);
+  \draw[solid ghost=2](b7)--(t10);
+  \draw[solid ghost=3](b8)--(t11);
+  \draw[solid ghost=4](b9)--(t12);
+  \draw[solid ghost=2](b10)--(t7);
+  \draw[solid ghost=3](b11)--(t8);
+  \draw[solid ghost=4](b12)--(t9);
+  \draw[solid ghost=1](b13)--(t15);
+  \draw[solid ghost=2](b14)--(t16);
+  \draw[solid ghost=1](b15)--(t13);
+  \draw[solid ghost=2](b16)--(t14);
+\end{tikzpicture}
+
+%3
+\begin{tikzpicture}[xscale=0.6, yscale=2]
+  \draw[red string=4](0,0)--+(0,1);
+  \draw[red string=4](9,0)--+(0,1);
+  \draw[red string=3](18,0)--+(0,1);
+  \draw[red string=3](27,0)--+(0,1);
+  \draw[red string=2](36,0)--+(0,1);
+  \draw[red string=2](45,0)--+(0,1);
+  \draw[red string=1](54,0)--+(0,1);
+  \draw[red string=1](63,0)--+(0,1);
+  \foreach \pt [count=\c] in {-0.08, 0.84, 8.76, 9.68, 17.60, 26.52, 35.44,
+             36.36, 37.28, 44.20, 45.12, 46.04, 52.96, 53.88, 61.80, 62.72}
+  {
+    \coordinate (b\c) at (\pt,0);
+    \coordinate (t\c) at (\pt,1);
+  }
+  \draw[solid ghost=4](b1)--(t3);
+  \draw[solid ghost=5](b2)--(t4);
+  \draw[solid ghost=4](b3)--(t1);
+  \draw[solid ghost=5](b4)--(t2);
+  \draw[solid ghost=3](b5)--(t5);
+  \draw[solid ghost=3](b6)--(t6);
+  \draw[solid ghost=2](b7)--(t10);
+  \draw[solid ghost=3](b8)--(t11);
+  \draw[solid ghost=4](b9)--(t12);
+  \draw[solid ghost=2](b10)--(t7);
+  \draw[solid ghost=3](b11)--(t8);
+  \draw[solid ghost=4](b12)--(t9);
+  \draw[solid ghost=1](b13)--(t13);
+  \draw[solid ghost=2](b14)--(t14);
+  \draw[solid ghost=1](b15)--(t15);
+  \draw[solid ghost=2](b16)--(t16);
+\end{tikzpicture}
+
+% 4
+\begin{tikzpicture}[xscale=0.6, yscale=2]
+  \draw[red string=4](0,0)--+(0,1);
+  \draw[red string=4](9,0)--+(0,1);
+  \draw[red string=3](18,0)--+(0,1);
+  \draw[red string=3](27,0)--+(0,1);
+  \draw[red string=2](36,0)--+(0,1);
+  \draw[red string=2](45,0)--+(0,1);
+  \draw[red string=1](54,0)--+(0,1);
+  \draw[red string=1](63,0)--+(0,1);
+  \foreach \pt [count=\c] in {-0.08, 0.84, 8.76, 9.68, 17.60, 26.52, 35.44,
+             36.36, 37.28, 44.20, 45.12, 46.04, 52.96, 53.88, 61.80, 62.72}
+  {
+    \coordinate (b\c) at (\pt,0);
+    \coordinate (t\c) at (\pt,1);
+  }
+  \draw[solid ghost=4](b1)--(t1);
+  \draw[solid ghost=5](b2)--(t2);
+  \draw[solid ghost=4](b3)--(t3);
+  \draw[solid ghost=5](b4)--(t4);
+  \draw[solid ghost=3](b5)--(t5);
+  \draw[solid ghost=3](b6)--(t6);
+  \draw[solid ghost=2](b7)--(t10);
+  \draw[solid ghost=3](b8)--(t11);
+  \draw[solid ghost=4](b9)--(t12);
+  \draw[solid ghost=2](b10)--(t7);
+  \draw[solid ghost=3](b11)--(t8);
+  \draw[solid ghost=4](b12)--(t9);
+  \draw[solid ghost=1](b13)--(t15);
+  \draw[solid ghost=2](b14)--(t16);
+  \draw[solid ghost=1](b15)--(t13);
+  \draw[solid ghost=2](b16)--(t14);
+\end{tikzpicture}
 
 \end{document}
