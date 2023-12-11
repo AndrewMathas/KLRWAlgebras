@@ -56,6 +56,7 @@ from copy                                  import deepcopy
 from sage.combinat.combination             import Combinations
 from sage.combinat.root_system.cartan_type import CartanType
 from sage.combinat.tuple                   import Tuples
+from sage.graphs.graph                     import Graph
 from sage.graphs.graph_plot                import GraphPlot
 from sage.groups.perm_gps.permgroup_named  import SymmetricGroup
 from sage.misc.cachefunc                   import cached_method
@@ -557,6 +558,91 @@ class CrystalArm:
         '''
         return self.word == other.word
 
+def FindPathsInBlock(
+        cry,
+        L,
+        residues,
+        detour_only = True, # return only graphs for detour permutations
+        verbose     = False,
+    ):
+    '''
+    Return the subgraph of all paths that have residue sequence that is a
+    permutation of `residue`
+
+    EXAMPLES:
+
+        sage: FindPathsInBlock(['A',4],[2], '213')
+    '''
+
+    if verbose:
+        def vprint(args): print(args)
+    else:
+        def vprint(args): pass
+
+    cry = CartanType(cry)
+    cmat = cry.cartan_matrix()
+    if not isinstance(L, list):
+        L = [L]
+    Lambda = sum(RootSystem(cry).weight_space().basis()[k] for k in L)
+    vprint(f'Constructing the {cry}-crystal of weight {Lambda}')
+    crystal = crystals.LSPaths(Lambda)
+
+    # keep track of the residues still required in the path
+    delta = {i: i for i in cry.index_set()}
+    for i in residues:
+        delta[int(i)] += 1
+
+    G = crystal.digraph(depth=len(residues))
+    depth = 0
+    # inductively construct the paths keeping track of the residues we still need
+    vlam = crystal.highest_weight_vector()
+    paths = [([vlam], delta)]
+    while depth < len(residues) and paths != []:
+        vprint(f'Number of paths: {len(paths)}')
+        depth += 1
+        vprint(f'{depth=}')
+        new_paths = []
+        for path in paths:
+            for _,w,i in G.edges(vertices=[path[0][-1]]):
+                if path[1][i] > 1:
+                    new_path = path[0].copy()
+                    new_path.append(w)
+                    new_delta = path[1].copy()
+                    new_delta[i] -= 1
+                    new_paths.append( (new_path, new_delta) )
+
+        paths = new_paths
+
+    vprint(f'{paths=}')
+    # construct and return the subgraphs of all detour permutations
+    if detour_only:
+        detours = {} # will contain the list of all detour permutation subgraphs
+        for path in paths:
+            edges = path[0]
+            sink = edges[-1]
+            if sink not in detours:
+                detours[sink] = dict(vertices=[vlam], edges=[])
+            for v in range(1,len(edges)):
+                if edges[v] not in detours[sink]['vertices']:
+                    detours[sink]['vertices'].append( edges[v] )
+                detours[sink]['edges'].append(
+                    ( detours[sink]['vertices'].index(edges[v-1]), detours[sink]['vertices'].index(edges[v]) )
+                )
+        return [ Graph([range(len(detours[G]['vertices'])), detours[G]['edges']],format='vertices_and_edges') for G in detours ]
+
+    # construct and return the subgraph for this block
+    vertices = [ crystal.highest_weight_vector() ]
+    edges = []
+    for path in paths:
+        for i in range(1,len(path[0])):
+            if path[0][i] not in vertices:
+                vertices.append(path[0][i])
+            edges.append( (vertices.index(path[0][i-1]), vertices.index(path[0][i])) )
+            vprint('{edges=}')
+
+
+    return Graph([range(len(vertices)), edges])
+
 def FindMinimalCrystalLoops(
         cry,
         L,
@@ -871,9 +957,9 @@ def CrystalGraph(cry, i, **args):
     cry = CartanType(cry)
     Lam = RootSystem(cry).weight_space().basis()
     try:
-        LS = crystals.LSPaths(cry, sum(Lam[j] for j in i))
+        LS = crystals.LSPaths(sum(Lam[j] for j in i))
     except TypeError:
-        LS = crystals.LSPaths(cry, Lam[i])
+        LS = crystals.LSPaths(Lam[i])
     return LS.digraph(subset=LS.subcrystal(**args))
 
 def CrystalGraphPBW(cry, max_depth=3, **args):
@@ -893,7 +979,7 @@ def CrystalGraphPBWFundamental(cry, Lam=[1], w0=None, **args):
     if w0 is not None:
         B.set_default_long_word(w0)
 
-    T = crystals.elementary.T(cry, sum(B.Lambda()[i] for i in Lam))
+    T = crystals.elementary.T(sum(B.Lambda()[i] for i in Lam))
     t = T[0]
     C = crystals.elementary.Component(cry)
     c = C[0]
