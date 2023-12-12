@@ -558,11 +558,11 @@ class CrystalArm:
         '''
         return self.word == other.word
 
-def FindPathsInBlock(
+def FindDetourPermuations(
         cry,
         L,
         residues,
-        detour_only = True, # return only graphs for detour permutations
+        residue_only = True, # return only detour permutations for the vertex with residue sequence `residue`
         verbose     = False,
     ):
     '''
@@ -588,60 +588,61 @@ def FindPathsInBlock(
     crystal = crystals.LSPaths(Lambda)
 
     # keep track of the residues still required in the path
-    delta = {i: i for i in cry.index_set()}
+    delta = {i: 0 for i in cry.index_set()}
     for i in residues:
         delta[int(i)] += 1
+    vprint(f'{delta=}')
 
     G = crystal.digraph(depth=len(residues))
     depth = 0
     # inductively construct the paths keeping track of the residues we still need
     vlam = crystal.highest_weight_vector()
-    paths = [([vlam], delta)]
+    paths = [([vlam], [], delta)]
     while depth < len(residues) and paths != []:
         vprint(f'Number of paths: {len(paths)}')
         depth += 1
         vprint(f'{depth=}')
         new_paths = []
         for path in paths:
+            vprint(f'Path residues = {path[1]} {path[2]}')
             for _,w,i in G.edges(vertices=[path[0][-1]]):
-                if path[1][i] > 1:
-                    new_path = path[0].copy()
-                    new_path.append(w)
-                    new_delta = path[1].copy()
-                    new_delta[i] -= 1
-                    new_paths.append( (new_path, new_delta) )
+                if path[2][i] > 0:
+                    new_path = deepcopy(path)
+                    new_path[0].append( w )
+                    new_path[1].append( i )
+                    new_path[2][i] -= 1
+                    new_paths.append(new_path)
+                    print(f'{i}: {path[1]}  {path[2]}   -->   {new_path[1]}  {new_path[2]}')
 
         paths = new_paths
 
-    vprint(f'{paths=}')
+    from pprint import pp
+    pp(paths)
     # construct and return the subgraphs of all detour permutations
-    if detour_only:
-        detours = {} # will contain the list of all detour permutation subgraphs
-        for path in paths:
-            edges = path[0]
-            sink = edges[-1]
-            if sink not in detours:
-                detours[sink] = dict(vertices=[vlam], edges=[])
-            for v in range(1,len(edges)):
-                if edges[v] not in detours[sink]['vertices']:
-                    detours[sink]['vertices'].append( edges[v] )
-                detours[sink]['edges'].append(
-                    ( detours[sink]['vertices'].index(edges[v-1]), detours[sink]['vertices'].index(edges[v]) )
-                )
-        return [ Graph([range(len(detours[G]['vertices'])), detours[G]['edges']],format='vertices_and_edges') for G in detours ]
-
-    # construct and return the subgraph for this block
-    vertices = [ crystal.highest_weight_vector() ]
-    edges = []
+    detours = {} # will contain the list of all detour permutation subgraphs
+    good_sinks = []
     for path in paths:
-        for i in range(1,len(path[0])):
-            if path[0][i] not in vertices:
-                vertices.append(path[0][i])
-            edges.append( (vertices.index(path[0][i-1]), vertices.index(path[0][i])) )
-            vprint('{edges=}')
+        edges = path[0]
+        labels = path[1]
+        sink = edges[-1]
+        if labels == residues:
+            good_sinks.append( sink )
+        if sink not in detours:
+            detours[sink] = dict(vertices=[vlam], edges={0: {}})
+        for v in range(1,len(edges)):
+            try:
+                vi = detours[sink]['vertices'].index(edges[v])
+            except ValueError:
+                detours[sink]['vertices'].append(edges[v])
+                vi = detours[sink]['vertices'].index(edges[v])
+                detours[sink]['edges'][vi] = {}
 
+            detours[sink]['edges'][detours[sink]['vertices'].index(edges[v-1])][vi] = f'{labels[v-1]}'
 
-    return Graph([range(len(vertices)), edges])
+    if residue_only:
+        return [ Graph(detours[G]['edges'], format='dict_of_dicts') for G in good_sinks ]
+
+    return [ Graph(detours[G]['edges'], format='dict_of_dicts') for G in detours ]
 
 def FindMinimalCrystalLoops(
         cry,
