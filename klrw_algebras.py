@@ -562,7 +562,6 @@ def FindDetourPermuations(
         cry,
         L,
         residues,
-        residue_only = True, # return only detour permutations for the vertex with residue sequence `residue`
         verbose     = False,
     ):
     '''
@@ -587,16 +586,30 @@ def FindDetourPermuations(
     vprint(f'Constructing the {cry}-crystal of weight {Lambda}')
     crystal = crystals.LSPaths(Lambda)
 
-    # keep track of the residues still required in the path
+    # ensure that  `residues` is an integer list
+    residues = [int(i) for i in residues]
+
+    # delta will keep track of the residues still required in the path
     delta = {i: 0 for i in cry.index_set()}
     for i in residues:
         delta[int(i)] += 1
     vprint(f'{delta=}')
 
-    G = crystal.digraph(depth=len(residues))
     depth = 0
     # inductively construct the paths keeping track of the residues we still need
     vlam = crystal.highest_weight_vector()
+
+    # find the vertex at the end of the residue sequence by applying the
+    # Kashiwara operators
+    wres = vlam
+    for i in residues:
+        wres = wres.f(i)
+
+    vprint(f'{wres=}')
+
+    G = crystal.digraph(depth=len(residues))
+    return G.subgraph(flatten(G.all_paths(vlam, wres)))
+
     paths = [([vlam], [], delta)]
     while depth < len(residues) and paths != []:
         vprint(f'Number of paths: {len(paths)}')
@@ -604,7 +617,6 @@ def FindDetourPermuations(
         vprint(f'{depth=}')
         new_paths = []
         for path in paths:
-            vprint(f'Path residues = {path[1]} {path[2]}')
             for _,w,i in G.edges(vertices=[path[0][-1]]):
                 if path[2][i] > 0:
                     new_path = deepcopy(path)
@@ -612,13 +624,17 @@ def FindDetourPermuations(
                     new_path[1].append( i )
                     new_path[2][i] -= 1
                     new_paths.append(new_path)
-                    print(f'{i}: {path[1]}  {path[2]}   -->   {new_path[1]}  {new_path[2]}')
 
         paths = new_paths
 
     from pprint import pp
     pp(paths)
     # construct and return the subgraphs of all detour permutations
+    # unfortunately, we need to construct all of the graphs for the block
+    # before we can check that the path ends in our special vertex when
+    # residue_only is true ... if we were smarter we could precompute the
+    # vertex at the end of our path...
+
     detours = {} # will contain the list of all detour permutation subgraphs
     good_sinks = []
     for path in paths:
@@ -640,6 +656,9 @@ def FindDetourPermuations(
             detours[sink]['edges'][detours[sink]['vertices'].index(edges[v-1])][vi] = f'{labels[v-1]}'
 
     if residue_only:
+        if len(good_sinks) == 1:
+            return Graph(detours[ good_sinks[0] ]['edges'], format='dict_of_dicts')
+
         return [ Graph(detours[G]['edges'], format='dict_of_dicts') for G in good_sinks ]
 
     return [ Graph(detours[G]['edges'], format='dict_of_dicts') for G in detours ]
