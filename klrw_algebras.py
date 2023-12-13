@@ -608,7 +608,10 @@ def FindDetourPermuations(
     vprint(f'{wres=}')
 
     G = crystal.digraph(depth=len(residues))
-    return G.subgraph(flatten(G.all_paths(vlam, wres)))
+    H = G.subgraph(flatten(G.all_paths(vlam, wres)))
+    H.vlam = vlam
+    H.wres  wres
+    return H
 
     paths = [([vlam], [], delta)]
     while depth < len(residues) and paths != []:
