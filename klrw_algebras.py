@@ -602,8 +602,13 @@ def FindDetourPermuations(
     # find the vertex at the end of the residue sequence by applying the
     # Kashiwara operators
     wres = vlam
-    for i in residues:
-        wres = wres.f(i)
+    try:
+        for i in residues:
+            wres = wres.f(i)
+
+    except AttributeError:
+        print(f'Invalid residue sequence {residues} for this crystal graph')
+        return []
 
     vprint(f'{wres=}')
 
