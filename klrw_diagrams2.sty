@@ -1,12 +1,16 @@
-%% ----------------------------------------------------------------
-%% klrw_diagrams --- A latex package for drawing KLRW diagrams
-%% E-mail: andrew.mathas@gmail.com
-%% Released under the LaTeX Project Public License v1.3c or later
-%% See http://www.latex-project.org/lppl.txt
-%% ----------------------------------------------------------------
+% ----------------------------------------------------------------
+% klrw_diagrams --- A latex package for drawing KLRW diagrams
+% E-mail: andrew.mathas@gmail.com
+%
+% https://github.com/AndrewMathas/KLRWAlgebras/
+%
+% Released under the LaTeX Project Public License v1.3c or later
+% See http://www.latex-project.org/lppl.txt
+% Modified: 14:17 Wednesday, 07 February 2024
+% ----------------------------------------------------------------
 
 \NeedsTeXFormat{LaTeX2e}
-\def\klrw@version{Version 1.0-- 2023/11/11}
+\def\klrw@version{Version 2.0-- 2024/02/11}
 \ProvidesPackage{klrw_diagrams}
   [\klrw@version\space- A package for drawing weighted KLRW diagrams]
 
@@ -23,7 +27,6 @@
 \RequirePackage{xparse}
 \RequirePackage{tikz}
 \usetikzlibrary{decorations.markings,decorations.pathreplacing}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% TikZ style settings
@@ -105,6 +108,25 @@
     draw ghost string,
     double,
   },
+  % dots on strings
+  klrw dots/.initial={},
+  klrw dot colour/.initial=,
+  klrw dot shift/.initial=0,
+  draw klrw dot/.style = {
+     decorate,
+     decoration={
+        markings,
+        mark=at position #1 with {
+          \node[text=\pgfkeysvalueof{/tikz/klrw dot colour},
+                shift={(\pgfkeysvalueof{/tikz/klrw dot shift},0)}]
+               {$\bullet$};
+        },
+     }
+  },
+  dot/.style = {
+      klrw dots=#1
+  },
+  dot/.default=0.5,
   % solid strings with ghosts
   solid ghost/.style = {
       solid = #1,
@@ -113,23 +135,21 @@
           dashed,
           transform canvas={shift={(\pgfkeysvalueof{/tikz/ghost shift},0)}}
       },
-      add ghost label = { \pgfkeysvalueof{/tikz/ghost shift} }{ #1 },
-  },
-  % dots on strings
-  dot/.style = {
-    decoration={
-      markings,
-      mark=at position #1 with {
-        \node[text=\pgfkeysvalueof{/tikz/solid colour}]{$\bullet$};
-        \node[text=\pgfkeysvalueof{/tikz/ghost colour},
-              xshift=\pgfkeysvalueof{/tikz/ghost shift}]{$\bullet$};
+      postaction = {
+        add ghost label = { \pgfkeysvalueof{/tikz/ghost shift} }{ #1 },
       },
-    },
-    preaction={
-      decorate
-    },
+      postaction={
+          klrw dot colour = \pgfkeysvalueof{/tikz/solid colour},
+          klrw dot shift = 0,
+          draw klrw dot/.list/.expanded ={\pgfkeysvalueof{/tikz/klrw dots}}
+      },
+      postaction={
+          klrw dot colour = \pgfkeysvalueof{/tikz/ghost colour},
+          klrw dot shift = \pgfkeysvalueof{/tikz/ghost shift},
+          transform canvas={shift={(\pgfkeysvalueof{/tikz/ghost shift},0)}},
+          draw klrw dot/.list/.expanded={\pgfkeysvalueof{/tikz/klrw dots}}
+      },
   },
-  dot/.default=0.5,
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -140,8 +160,8 @@
   \begin{tikzpicture}[anchorbase]
     \def\residues{{#4}}
     \foreach \res [count=\c,
-                   evaluate=\res as \pos using {\res<=#3 ? #1*\res-\c*#1/15 : #1*(\res-2)-\c*#1/15}
-        ] in {#4} {
+        evaluate=\res as \pos using {\res<=#3 ? #1*\res-\c*#1/15 : #1*(\res-2)-\c*#1/15}
+    ] in {#4} {
           \coordinate (\c) at (\pos,0);
           \draw[solid=\res](\c)--++(0,1);
           \ifnum\res=#3\relax\else
@@ -243,7 +263,6 @@
     }
   \end{tikzpicture}%
 }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \endinput
