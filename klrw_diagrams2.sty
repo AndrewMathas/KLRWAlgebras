@@ -6,7 +6,7 @@
 %
 % Released under the LaTeX Project Public License v1.3c or later
 % See http://www.latex-project.org/lppl.txt
-% Modified: 14:17 Wednesday, 07 February 2024
+% Modified: 14:05 Monday, 19 February 2024
 % ----------------------------------------------------------------
 
 \NeedsTeXFormat{LaTeX2e}
@@ -33,8 +33,8 @@
 
 \tikzset{
   % centering commands
-  anchorbase/.style={baseline={([yshift=#1]current bounding box.center)}},
-  anchorbase/.default={-0.5ex},
+  centering/.style={baseline={([yshift=#1]current bounding box.center)}},
+  centering/.default=-0.5ex,
   % default string colours
   affine colour/.initial=orange,
   affine color/.style={affine colour=#1},
@@ -56,22 +56,30 @@
   klrw label/.style = {
       font=\scriptsize,
   },
-  add string label/.style 2 args= { % colour, label
-    decoration = {
-      markings,
-      mark = at position 0 with {
-          \node[below, klrw label, text={\pgfkeysvalueof{/tikz/#1 colour}}]  {$#2$}; },
-    },
-    postaction = { decorate }
+  klrw affine label/.style = {
+      klrw label,
+      below
   },
-  add ghost label/.style 2 args = { % offset, label
+  klrw ghost label/.style = {
+      klrw label,
+      above
+  },
+  klrw red label/.style = {
+      klrw label,
+      below
+  },
+  klrw solid label/.style = {
+      klrw label,
+      below
+  },
+  add klrw string label/.style n args = {4}{ % colour, position, shift, label
     decoration = {
       markings,
-      mark = at position 1 with {
-          \node[above, klrw label,
-                text={\pgfkeysvalueof{/tikz/ghost colour}},
-                shift={(#1, 0)}] {$#2$};
-      },
+      mark = at position #2 with {
+        \node[klrw#1label,
+              text  = { \pgfkeysvalueof{/tikz/#1 colour} },
+              shift = { (#3, 0)}
+        ]{ $#4$}; },
     },
     postaction = { decorate }
   },
@@ -81,23 +89,23 @@
     double=\pgfkeysvalueof{/tikz/red colour}!40,
     draw=\pgfkeysvalueof{/tikz/red colour},
     double distance = 1pt,
-    add string label = {red}{#1},
+    add klrw string label = { red }{ 0 }{ 0 }{ #1 },
   },
   affine/.style = {
     klrw string,
     double=\pgfkeysvalueof{/tikz/affine colour}!40,
     draw=\pgfkeysvalueof{/tikz/affine colour},
     double distance = 1pt,
-    add string label = {affine}#1,
+    add klrw string label = { affine }{ 0 }{ 0 }{ #1 },
   },
   solid/.style = {
     klrw string,
     draw=\pgfkeysvalueof{/tikz/solid colour},
-    add string label = {solid}{#1},
+    add klrw string label = { solid }{ 0 }{ 0 }{ #1 },
   },
   ghost/.style = {
     draw ghost string,
-    add ghost label = { 0 }{ #1 },
+    add klrw string label = { ghost }{ 1 }{ \pgfkeysvalueof{/tikz/ghost shift} }{ #1 },
   },
   draw ghost string/.style = {
     klrw string,
@@ -136,7 +144,7 @@
           transform canvas={shift={(\pgfkeysvalueof{/tikz/ghost shift},0)}}
       },
       postaction = {
-        add ghost label = { \pgfkeysvalueof{/tikz/ghost shift} }{ #1 },
+          add klrw ghost label = { ghost }{ 1 }{ \pgfkeysvalueof{/tikz/ghost shift} }{ #1 },
       },
       postaction={
           klrw dot colour = \pgfkeysvalueof{/tikz/solid colour},
