@@ -558,7 +558,7 @@ class CrystalArm:
         '''
         return self.word == other.word
 
-def FindDetourPermuations(
+def FindDetourPermutations(
         cry,
         L,
         residues,
@@ -570,7 +570,11 @@ def FindDetourPermuations(
 
     EXAMPLES:
 
-        sage: FindPathsInBlock(['A',4],[2], '213')
+        sage: FindDetourPermutations(['A',4],[2], '213')
+
+        # Williamson's counterexample to Kleshchev-Ram, as described in
+        # Example 2.16 of Brundan-Kleshchev-McNamara
+        sage: FindDetourPermutations(['A',5],[4,4,3,3,2,2,1,1], '4534234523123412')
     '''
 
     if verbose:
@@ -670,6 +674,9 @@ def FindDetourPermuations(
         return [ Graph(detours[G]['edges'], format='dict_of_dicts') for G in good_sinks ]
 
     return [ Graph(detours[G]['edges'], format='dict_of_dicts') for G in detours ]
+
+
+
 
 def FindMinimalCrystalLoops(
         cry,
