@@ -1276,7 +1276,7 @@ class KLRWIdempotentDiagram(SageObject):
             <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
             <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>o<CSI-0m>  <CSI-38;5;246m>o<CSI-0m> 2<CSI-38;5;27m>o<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;27m>o<CSI-0m> 2<CSI-38;5;246m>o<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>o<CSI-0m>
             <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-48;5;196m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>  <CSI-38;5;27m>|<CSI-0m>  <CSI-38;5;246m>|<CSI-0m>
-            1  2     2  3     3     3  3     4     4        5   
+            1  2     2  3     3     3  3     4     4        5
 
         """
         self._cartan_type = CartanType(cartan)
@@ -1318,6 +1318,10 @@ class KLRWIdempotentDiagram(SageObject):
 
         if not hasattr(self, '_path'):
             raise TypeError(f'unrecognised path specification: {path=}')
+
+        # sort the path into its different components
+        self._path_components = [[] for i in self._wt)]
+        def find_path_components()
 
         # keep track of whether we have added to the LaTeX preamble
         self._have_added_latex_preamble = False
@@ -1476,6 +1480,29 @@ class KLRWIdempotentDiagram(SageObject):
         xcoord = self._red_shift*len(self._red_strings+self._affine_strings)
         self._affine_strings.append( xcoord )
         self.place_string('affine', residue,xcoord, anchor=len(self._red_strings)+len(self._affine_strings))
+
+    def find_path_components(self):
+        '''
+        Find the different components of the path so that we can draw the
+        idempotent diagram.
+
+        Following Lemma 6B.6 of [MT24]_ given the residue sequence
+        `p=(p_1,\dots,p_n)` we can decompose it into its components
+        `p=p^{(1)}|\dots|p^{(\ell)})` by choosing m to be minimal such that
+
+        ..MATH:
+
+            \varepsilon_{i}(\lambda_{m})+\sum_{1\leq l<m}\bigl(\varepsilon_{i}(\lambda_{l})-\varphi_{i}(\lambda_{l})\bigr)\geq
+                \varepsilon_{i}(\lambda_{k})+\sum_{1\leq l<k}\bigl(\varepsilon_{i}(\lambda_{l})-\varphi_{i}(\lambda_{l})\bigr)
+
+        '''
+        # we need the fundamental crystal graphs for each of the fundamental
+        # weights that sum to self._wt
+        crystals = [ crystals.LSPaths(self._cry, self._weight_space.basis()[i]) for i in self._wt ]
+        # keep track of the sink vertices in each component
+        sources = [ c.highest_weight_vector(C) for C in crystals ]
+        for k,i in enumerate(self._path):
+
 
 
     def place_string(self, type, residue, xcoord, anchor):
