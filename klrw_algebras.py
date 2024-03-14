@@ -66,6 +66,8 @@ from sage.rings.real_mpfr                  import RR
 from sage.structure.sage_object            import SageObject
 from sage.typeset.ascii_art                import AsciiArt
 
+import sage.combinat.crystals.catalog
+
 from decimal import Decimal
 
 def quantum_integer(q,k):
@@ -1233,6 +1235,11 @@ class KLRWIdempotentDiagram(SageObject):
 
 
     The `path` 
+
+    EXAMPLES:
+
+        sage: KLRWIdempotentDiagram(['A',5],[4,4,3,3,2,2,1,1], '4534234523123412')
+
     '''
 
     # maps from sage's labelling to the labelling of MT
@@ -1249,6 +1256,9 @@ class KLRWIdempotentDiagram(SageObject):
     # maps from the labelling of MT to sage's labelling
     _relabelling_cartan = {
         'C': lambda cart, i: cart.rank() - i + 1,
+
+
+
         'E': lambda cart, i: i if i not in [2,3,4] else 4 if i==2 else i-1
     }
 
@@ -1320,8 +1330,8 @@ class KLRWIdempotentDiagram(SageObject):
             raise TypeError(f'unrecognised path specification: {path=}')
 
         # sort the path into its different components
-        self._path_components = [[] for i in self._wt)]
-        def find_path_components()
+        self._path_components = [[] for i in self._wt]
+        self.find_path_components()
 
         # keep track of whether we have added to the LaTeX preamble
         self._have_added_latex_preamble = False
@@ -1359,8 +1369,8 @@ class KLRWIdempotentDiagram(SageObject):
         self._affine_strings = []
 
         # now add the strings in the path to the diagram
-        for red in range(len(self._path)):
-            for i in self._path[red]:
+        for red in range(len(self._path_components)):
+            for i in self._path_components[red]:
                 self._solid += Decimal('1')  # increment the number of solid strings
                 self.add_string(i, red)      # add a new solid i-string to component `red`
 
@@ -1382,7 +1392,7 @@ class KLRWIdempotentDiagram(SageObject):
 
     def add_string(self, i, red):
         """
-        Add a solid string of residue `i`, together with any ghost strinngs, to
+        Add a solid string of residue `i`, together with any ghost strings, to
         the diagram by putting the string on the left-hand side of the `red`th
         red string and then dragging it as far as possible to the right.
 
@@ -1479,10 +1489,10 @@ class KLRWIdempotentDiagram(SageObject):
         """
         xcoord = self._red_shift*len(self._red_strings+self._affine_strings)
         self._affine_strings.append( xcoord )
-        self.place_string('affine', residue,xcoord, anchor=len(self._red_strings)+len(self._affine_strings))
+        self.place_string('affine', residue, xcoord, anchor=len(self._red_strings)+len(self._affine_strings))
 
     def find_path_components(self):
-        '''
+        r'''
         Find the different components of the path so that we can draw the
         idempotent diagram.
 
@@ -1498,10 +1508,27 @@ class KLRWIdempotentDiagram(SageObject):
         '''
         # we need the fundamental crystal graphs for each of the fundamental
         # weights that sum to self._wt
-        crystals = [ crystals.LSPaths(self._cry, self._weight_space.basis()[i]) for i in self._wt ]
+        component_crystals = [ crystals.LSPaths(self._cartan_type, self._weight_space.basis()[i]) for i in self._wt ]
         # keep track of the sink vertices in each component
-        sources = [ c.highest_weight_vector(C) for C in crystals ]
-        for k,i in enumerate(self._path):
+        sources = [ cry.highest_weight_vector() for cry in component_crystals ]
+        for i in self._path[0]:
+            # we want to find m such that
+            #  ε_ι(λ_m) + Σ_1323Γ
+            m = 1
+            phis = [s.phi(i) for s in sources]
+            delta = 0
+            # compute \phi_(sources[m]) + \sum_{l<m} <wt(sources[l]),\alpha_i^\vee>
+            #            = \phi_(sources[m]) + \sum_{l<m}(\phi_i(sources[l])-\episilon_i(sources[l]))
+            for m in range(len(sources))[::-1]:
+                phis[m] += delta
+                delta += sources[m].phi_minus_epsilon(i)
+            # this edge comes from the first place where the minimum is attained
+            m = len(phis) - phis[::-1].index( max(phis) ) - 1
+
+            print(f' - {i} placed in component {m} via {phis=}')
+            self._path_components[m].append(i)
+            sources[m] = sources[m].reflect_step(0, i)
+
 
 
 
